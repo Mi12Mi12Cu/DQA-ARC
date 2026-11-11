@@ -81,6 +81,15 @@ See [UPLOAD_TO_GITHUB.md](UPLOAD_TO_GITHUB.md) for the final URL, license, valid
 
 Original run metadata preserves the collection-machine paths recorded at experiment time. Analysis uses repository-relative locations and does not depend on those archived absolute path strings.
 
+
 ## Artifact URL and license
 
-Replace `REPLACE-WITH-PUBLIC-REPOSITORY-URL` in `CITATION.cff` and `ANONYMIZED-ARTIFACT-URL` in `paper/main.tex` after publishing the repository. The included license is deliberately restrictive until the authors choose an open-source code license and, if desired, a separate dataset license.
+The DQA-ARC research artifact is hosted at:
+
+https://github.com/Mi12Mi12Cu/DQA-ARC
+
+The repository contains the implementation, experimental data, analysis scripts, publication figures, and journal manuscript.
+
+The repository is currently private and accessible only to authorized collaborators. Public access will be enabled following approval by the authors and in accordance with the target journal's artifact-availability requirements.
+
+The included LICENSE file defines the current usage restrictions. An open-source software license and, where appropriate, a separate dataset license may be selected before public release.
