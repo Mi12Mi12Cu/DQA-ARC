@@ -28,6 +28,8 @@ The document uses the standard IEEEtran class and commonly available LaTeX
 packages: amsmath, amssymb, booktabs, graphicx, multirow, url, xcolor, cite,
 and microtype.
 
-Before public submission, replace ANONYMIZED-ARTIFACT-URL in main.tex with the
-archival repository URL. The placeholder is intentional; no repository URL is
-invented by the manuscript-generation scripts.
+
+The manuscript source (main.tex) includes the DQA-ARC research artifact repository URL:
+https://github.com/Mi12Mi12Cu/DQA-ARC
+The repository contains the implementation, experimental datasets, analysis scripts, and reproducibility instructions. Repository access is currently restricted while the repository remains private. Public availability will be confirmed before journal submission or publication, as appropriate.
+
