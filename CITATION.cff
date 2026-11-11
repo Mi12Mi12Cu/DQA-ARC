@@ -1,0 +1,14 @@
+cff-version: 1.2.0
+message: "If you use this artifact, please cite the associated paper."
+title: "DQA-ARC: Deadline- and Quality-Aware Application-State Control for MQTT--LLM Pipelines"
+type: software
+version: 1.1.0
+date-released: 2026-11-11
+authors:
+  - family-names: Udurume
+    given-names: Miracle
+  - family-names: Shakhov
+    given-names: Vladimir
+  - family-names: Koo
+    given-names: Insoo
+repository-code: "REPLACE-WITH-PUBLIC-REPOSITORY-URL"

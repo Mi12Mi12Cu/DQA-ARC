@@ -1,0 +1,232 @@
+\section{Evaluation}
+\label{sec:evaluation}
+
+The evaluation asks seven questions. (Q1) How does class-conditioned configuration selection compare with compact, maximum-context, and token-max rules across models? (Q2) How do the five deadline policies behave under Poisson and bursty traffic? (Q3) Can a guarded controller improve upon the best fixed deadline when service time changes? (Q4) Does the implemented feedback gain satisfy the local stability condition? (Q5) What does protocol acknowledgment reveal about application completion? (Q6) Can bounded-delay token-bucket shaping make burst admission robust without merely relocating loss? (Q7) How does \method{} compare with occupancy-threshold admission, static class reservation, and their combination under stationary, bursty, and drifting workloads?
+
+\subsection{Testbed, Workloads, and Statistical Method}
+
+Table~\ref{tab:testbed} lists the testbed. Both inference endpoints run on one physical host. The GPU endpoint uses the RTX~3060; the CPU-only endpoint is started with GPU visibility disabled. The arrangement isolates execution-class differences from device-to-device network effects and is not presented as a wireless or multi-device testbed. Qwen2.5--3B is the live model; Qwen2.5--1.5B/7B~\cite{qwen2025qwen25} and Llama~3.1--8B~\cite{grattafiori2024llama3} provide model-diversity profiles. Decoding is deterministic with temperature zero and a per-request seed.
+
+\begin{table}[t]
+\centering
+\caption{Live Testbed}
+\label{tab:testbed}
+\small
+\begin{tabular}{@{}ll@{}}
+\toprule
+Component & Configuration \\
+\midrule
+CPU / memory & AMD Ryzen 5 5600X / 32~GiB \\
+GPU & NVIDIA RTX 3060, 12~GiB \\
+Broker & Mosquitto 2.1.2, MQTT~5/QoS~1 \\
+Broker config. & loopback:18884, persistence off \\
+Controller/client & Node.js 24.22.1, MQTT.js 5.14.1 \\
+LLM runtime & Ollama 0.40.14, Q4-class models \\
+Models & Qwen2.5--1.5B/3B/7B; Llama~3.1--8B \\
+Live model & Qwen2.5--3B, Q4\_K\_M \\
+Operating system & Windows build 26200 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Each live run starts an isolated Mosquitto process and records its configuration, seed, events, control epochs, process samples, and broker log. The main matrix contains 100 runs: five policies, two traffic models, ten paired seeds, and 120~s per run. Poisson arrivals have mean 4/s. The MMPP alternates between 1/s and 12/s with transition rates chosen for stationary mean 4/s. Every selected 120-s MMPP schedule visits both states; the mean number of transitions is $33.7\pm4.72$ (95\% interval). Three 60-s studies contain 40 allocator runs, 60 fixed-deadline/guarded sweep runs, and 20 service-drift runs. The conventional-baseline matrix contains 60 paired 120-s Poisson/MMPP runs and 30 paired 60-s rate/model-drift runs. The complete live study therefore contains 310 runs and 7.83~h of offered workload. Application-state capacity is eight records, the CPU-class preference is 20\%, $\alpha=0.05$, and the control epoch is 4~s.
+
+Policies in a matched seed receive the same arrival times, task sequence, and preferred execution classes. Execution order is rotated within each policy family and seed to reduce time-order confounding. The \method{} and conventional-baseline campaigns use identical software and hardware but were conducted in separate campaign blocks; residual long-term machine-state effects are therefore possible. Tables report the mean and Student-$t$ 95\% half-width across ten replications. Paired differences use a two-sided exact sign-flip test over all $2^{10}$ sign assignments. Task accuracy uses Wilson 95\% intervals and exact McNemar tests on paired held-out predictions. No asymptotic normal approximation is used for the paired tests.
+
+The empirical replay is a discrete-event simulation driven by measured calibration service samples and held-out correctness outcomes. It contains two serial execution-class queues, bounded application records, completion/expiry races, control epochs, and the same policies. Each run lasts 300~s. Capacity, rate, class-mixture, and traffic sweeps comprise 9,800 seeded runs, with at least 100 replications at every main plotted point. Replay intervals are Student-$t$ intervals across seeds.
+
+\subsection{Task Corpus and Multi-Model Profiles}
+
+The corpus contains 240 balanced IoT safety decisions across thermal, air/smoke, vibration, and electrical-power domains. Its three request classes are direct numeric readings, temporal histories whose trend changes the action, and heterogeneous operator/device logs whose unstructured evidence can override the numeric state. Each class has 80 items, split evenly between calibration and held-out evaluation; two semantically equivalent prompt templates are balanced within every domain and split. The expected output is one exact JSON action from \texttt{NORMAL}, \texttt{MONITOR}, \texttt{ALERT}, and \texttt{SHUTDOWN}. Exact labels make the timing/selection study reproducible while histories and natural-language logs retain the reason for using an LLM rather than a four-threshold rule.
+
+Compact context contains the current numeric event and threshold rule. Standard context adds conditional history/log rules but omits the request-specific evidence. Extended context supplies that evidence together with archived distractors. Thus, direct readings are answerable from compact input, whereas selected history and log requests require the extended evidence. The candidate set is $\{\text{compact, standard, extended}\}\times\{16,24,48\}$ output tokens. Eight-token output is retained only as a truncation check and is not an allocation candidate.
+
+Profiling produced 10,800 measured inference observations across four models, two execution classes, two data splits, and the nine configurations. Figure~\ref{fig:quality-models} reports held-out strategy accuracy, 120 items per model. Class-conditioned selection substantially exceeds static compact for Qwen2.5--1.5B (60.8\% versus 45.8\%, exact $p=0.00294$), 3B (71.7\% versus 59.2\%, $p=0.00813$), and 7B (78.3\% versus 60.0\%, $p=0.000680$). It equals maximum context for 7B, but not for 1.5B or 3B; for Llama~3.1--8B its 65.8\% is statistically indistinguishable from compact's 66.7\% and maximum context's 69.2\%. Configuration utility is therefore model- and class-dependent, and profiling does not imply that a quality-aware rule must dominate every static rule.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\columnwidth]{fig1_quality_models.png}
+  \caption{Held-out strategy accuracy across four models; bars show Wilson 95\% intervals ($n=120$ tasks per model and strategy).}
+  \label{fig:quality-models}
+\end{figure}
+
+For Qwen2.5--3B, calibration selects standard--16 for direct readings and histories, and extended--24 for logs. The resulting held-out accuracy is 71.7\%, while maximum context reaches 75.8\%. This gap is important: the allocator uses only calibration labels, and a finite calibration corpus can choose a configuration whose held-out utility is lower than a simple static alternative.
+
+\subsection{Main Live Mosquitto--LLM Matrix}
+
+Table~\ref{tab:live-main} reports the 100 main runs. Under Poisson input, guarded control obtains $2.655\pm0.094$ correct on-time results/s versus $2.590\pm0.085$/s for the 3-s fixed policy. The paired gain is $0.065\pm0.059$/s (exact $p=0.0234$). It reduces expiry by $6.56\pm1.36$ percentage points ($p=0.00195$), but blocking rises by $3.74\pm1.42$ points ($p=0.00391$). The analytical deadline nearly eliminates blocking, yet its 19.6\% expiry lowers goodput to 2.343/s; low blocking alone is therefore not evidence of useful completion.
+
+\begin{table*}[t]
+\centering
+\caption{Main Live Matrix: Mean $\pm$ 95\% Half-Width (Ten Paired 120-s Runs per Row)}
+\label{tab:live-main}
+\small
+\begin{tabular}{@{}llrrr@{}}
+\toprule
+Traffic & Policy & Blocking (\%) & Expiry/admitted (\%) & Correct goodput (s$^{-1}$) \\
+\midrule
+Poisson & Fixed & $1.16\pm0.55$ & $10.20\pm2.03$ & $2.590\pm0.085$ \\
+Poisson & Analytical & $0.04\pm0.10$ & $19.62\pm1.79$ & $2.343\pm0.055$ \\
+Poisson & Calibrated & $7.09\pm3.39$ & $2.02\pm1.20$ & $2.647\pm0.105$ \\
+Poisson & Adaptive & $5.04\pm1.64$ & $4.40\pm2.52$ & $2.634\pm0.096$ \\
+Poisson & Guarded (\method{}) & $4.90\pm1.63$ & $3.64\pm1.76$ & $2.655\pm0.094$ \\
+\midrule
+MMPP & Fixed & $27.48\pm2.74$ & $10.24\pm2.10$ & $2.088\pm0.210$ \\
+MMPP & Analytical & $16.13\pm2.50$ & $44.30\pm7.21$ & $1.473\pm0.096$ \\
+MMPP & Calibrated & $30.73\pm2.78$ & $4.10\pm3.37$ & $2.115\pm0.198$ \\
+MMPP & Adaptive & $21.44\pm2.32$ & $31.18\pm11.69$ & $1.685\pm0.111$ \\
+MMPP & Guarded (\method{}) & $29.36\pm2.72$ & $19.88\pm6.55$ & $1.820\pm0.151$ \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+MMPP arrivals reverse the steady Poisson comparison. Guarded control increases blocking by $1.88\pm1.13$ points and expiry by $9.64\pm5.62$ points relative to fixed (both $p=0.00781$), while goodput decreases by $0.268\pm0.149$/s ($p=0.00391$). Calibrated feedforward has the largest mean MMPP goodput, 2.115/s, but its paired difference from fixed is only 0.027/s ($p=0.254$). The live evidence therefore does not support a traffic-independent superiority claim. The Erlang feedforward is useful in its local Poisson regime; within-epoch bursts violate the arrival approximation and fill capacity before mean-rate feedback can respond.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\columnwidth]{fig2_live_tradeoff.png}
+  \caption{Live blocking--goodput trade-off. Circles denote Poisson and squares MMPP; horizontal and vertical bars are 95\% intervals across ten runs.}
+  \label{fig:live-tradeoff}
+\end{figure}
+
+Across all 310 selected runs, mean per-run PUBACK p95 is 1.74~ms (range 1.39--2.26~ms). By contrast, main-matrix application p95 spans means of 0.657--5.461~s across policy/traffic cells. Fast PUBACK consequently says that Mosquitto accepted protocol delivery; it does not say that an admitted inference completed before its application deadline. The measured p99 difference between end-to-end time and subscriber wall time is generally tens of milliseconds, supporting the explicit 50-ms messaging/event-loop reserve in~\eqref{eq:floors} without an arbitrary GPU/CPU multiplier.
+
+\subsection{Fixed-Deadline Sweep and Local Stability}
+
+The Poisson sweep compares fixed $D\in\{1,2,3,5,8\}$~s with guarded control using ten paired 60-s runs per variant. Table~\ref{tab:deadline-sweep} exposes the fixed-policy frontier: a longer deadline increases blocking but lets more admitted jobs finish. The 8-s fixed setting has the largest mean goodput, $2.755\pm0.105$/s, and is therefore the fixed comparator used in the drift study. Guarded goodput is $2.727\pm0.130$/s; its paired difference from fixed--8 is $-0.028\pm0.051$/s ($p=0.281$). Its blocking difference is $-0.41\pm0.80$ points ($p=0.375$), and expiry difference is $+1.65\pm1.76$ points ($p=0.0625$). Under stationary Poisson input, a well-tuned fixed deadline is thus competitive.
+
+\begin{table}[t]
+\centering
+\caption{Poisson Deadline Sweep (Ten Paired Runs)}
+\label{tab:deadline-sweep}
+\small
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+Policy & Blocking (\%) & Expiry (\%) & Goodput/s \\
+\midrule
+Fixed--1 s & $0.04\pm0.10$ & $13.05\pm3.02$ & $2.597\pm0.123$ \\
+Fixed--2 s & $0.32\pm0.35$ & $10.87\pm3.35$ & $2.645\pm0.129$ \\
+Fixed--3 s & $1.12\pm0.80$ & $8.83\pm3.15$ & $2.670\pm0.127$ \\
+Fixed--5 s & $2.88\pm1.73$ & $4.82\pm2.52$ & $2.737\pm0.135$ \\
+Fixed--8 s & $5.13\pm3.21$ & $1.15\pm0.83$ & $2.755\pm0.105$ \\
+Guarded & $4.72\pm2.80$ & $2.80\pm2.11$ & $2.727\pm0.130$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\columnwidth]{fig3_deadline_sweep.png}
+  \caption{Fixed-deadline blocking with 95\% intervals. The shaded band is the guarded mean interval.}
+  \label{fig:deadline-sweep}
+\end{figure}
+
+A finite-difference fit to the log-deadline blocking response near the 5\% target gives $g=0.04095$. With $a=0.7$ and $\eta=1.5$, the left side of~\eqref{eq:stability-condition} is $\eta(1-a)g=0.0184$, well below $2(1+a)=3.4$. The implemented gain therefore satisfies Proposition~1's local condition at this operating point. This is a local feedback result, not a guarantee under MMPP input, clipping, or an infeasible capacity target.
+
+\subsection{Live Allocation Baselines}
+
+Figure~\ref{fig:allocator} compares four allocators using a Latin-square order over ten matched Poisson seeds. Quality-aware selection raises on-time strict accuracy from $60.75\pm1.00$\% for static compact to $73.08\pm0.98$\%; the paired gain is $12.33\pm1.30$ points ($p=0.00195$). Goodput increases from $2.417\pm0.091$ to $2.697\pm0.144$/s ($p=0.00391$). This gain is not free: blocking increases by $3.95\pm2.10$ points and expiry by $3.44\pm2.40$ points (both $p=0.00391$).
+
+Static maximum context and token-max are stronger here. Their accuracies are $75.88\pm0.95$\% and $76.10\pm0.94$\%, with goodputs $2.962\pm0.104$ and $2.985\pm0.121$/s. Quality-aware selection is lower by 2.80 and 3.02 accuracy points, respectively, and by 0.265 and 0.288 results/s (all paired $p=0.00195$). The ordering places quality-aware selection between the compact latency-oriented rule and the stronger maximum-budget rules on this model and corpus.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\columnwidth]{fig4_allocator.png}
+  \caption{Matched live allocator study. Error bars are 95\% intervals across ten runs. ``Max.'' is static extended--48; ``Token'' maximizes feasible prompt-plus-output budget.}
+  \label{fig:allocator}
+\end{figure}
+
+\subsection{Model-Service Drift}
+
+The drift workload uses 60~s with a Poisson rate step from 2/s to 6/s at 30~s and switches the service model from Qwen2.5--3B to 7B at the same instant. Fixed uses the sweep-selected 8-s deadline. Figure~\ref{fig:drift} summarizes ten paired seeds. Guarded control lowers blocking from $33.38\pm4.76$\% to $23.77\pm3.22$\%, a paired change of $-9.61\pm2.91$ points ($p=0.00195$). Expiry falls from $17.63\pm2.74$\% to $14.32\pm3.05$\% ($-3.31\pm2.51$ points, $p=0.0215$), and goodput rises from $1.605\pm0.116$ to $1.922\pm0.072$/s ($+0.317\pm0.124$/s, $p=0.00195$). Accuracy does not change significantly ($p=0.643$). Guarded control reroutes $7.4\pm2.76$ jobs per run, whereas fixed does not reroute.
+
+This result locates the controller's practical advantage: not a stationary setting for which a fixed deadline can be tuned after the fact, but a service distribution and arrival rate that move away from that tuning point. The common 8-s maximum is used in every live study; the class floor adapts through measured p95 service, FIFO work ahead, and the 50-ms reserve rather than class-specific constants.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\columnwidth]{fig5_drift.png}
+  \caption{Fixed--8 versus guarded control during simultaneous rate and model-service drift; error bars are 95\% intervals.}
+  \label{fig:drift}
+\end{figure}
+
+\subsection{Comparison with Conventional Admission Control}
+
+Table~\ref{tab:standard-baselines} and Fig.~\ref{fig:standard-baselines} compare \method{} with the three rules defined in Section~\ref{sec:controller}. Each row summarizes ten paired seeds. Under Poisson input, \method{} lowers blocking by 6.64 points relative to B1 ($p=0.00195$) while its 0.090/s goodput increase is not significant ($p=0.0684$). Its goodput advantages over B2 and B3 are 0.455/s and 0.837/s (both $p=0.00195$). The lower blocking is accompanied by more post-admission expiry than B1 and B3, showing that a protected slot is not equivalent to a successful result.
+
+\begin{table*}[t]
+\centering
+\caption{\method{} and Conventional Admission Baselines: Mean $\pm$ 95\% Half-Width (Ten Paired Runs per Row)}
+\label{tab:standard-baselines}
+\small
+\begin{tabular}{@{}llrrr@{}}
+\toprule
+Scenario & Method & Blocking (\%) & Expiry/admitted (\%) & Correct goodput (s$^{-1}$) \\
+\midrule
+Poisson & \method{} & $4.90\pm1.63$ & $3.64\pm1.76$ & $2.655\pm0.094$ \\
+ & B1: occupancy threshold & $11.54\pm3.66$ & $0.72\pm1.05$ & $2.565\pm0.142$ \\
+ & B2: static reservation & $22.56\pm9.12$ & $2.59\pm1.96$ & $2.200\pm0.260$ \\
+ & B3: threshold + reservation & $36.69\pm7.58$ & $0.56\pm0.44$ & $1.818\pm0.206$ \\
+\midrule
+MMPP & \method{} & $29.36\pm2.72$ & $19.88\pm6.55$ & $1.820\pm0.151$ \\
+ & B1: occupancy threshold & $37.02\pm4.89$ & $0.16\pm0.15$ & $2.006\pm0.161$ \\
+ & B2: static reservation & $52.11\pm6.66$ & $4.69\pm2.52$ & $1.437\pm0.145$ \\
+ & B3: threshold + reservation & $61.41\pm4.72$ & $1.62\pm1.38$ & $1.181\pm0.085$ \\
+\midrule
+Rate/model drift & \method{} & $23.77\pm3.22$ & $14.32\pm3.05$ & $1.922\pm0.072$ \\
+ & B1: occupancy threshold & $43.11\pm4.71$ & $16.11\pm2.71$ & $1.395\pm0.132$ \\
+ & B2: static reservation & $55.70\pm3.89$ & $29.83\pm5.31$ & $0.880\pm0.140$ \\
+ & B3: threshold + reservation & $67.02\pm3.73$ & $31.71\pm5.70$ & $0.648\pm0.118$ \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+Under MMPP input, \method{} again lowers blocking relative to B1 by 7.66 points ($p=0.00195$), but B1 nearly eliminates expiry and obtains 0.186/s more goodput ($p=0.0215$). In contrast, \method{} exceeds B2 and B3 by 0.383/s ($p=0.00391$) and 0.639/s ($p=0.00195$). This is a genuine operating-point trade-off: B1 rejects more requests before execution, whereas \method{} admits more work that can expire when a burst outruns its mean-rate controller.
+
+The drift condition gives the clearest separation. Relative to B1, \method{} reduces blocking by 19.34 points and increases goodput by 0.527/s (both $p=0.00195$); the 1.80-point expiry reduction is not significant ($p=0.217$). Relative to B2 and B3, the goodput gains are 1.042/s and 1.273/s, while blocking falls by 31.92 and 43.25 points and expiry by 15.51 and 17.40 points (all $p=0.00195$). Static guard slots cannot follow the simultaneous increase in offered rate and service time, whereas the measured deadline/routing state adapts to it.
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=0.99\textwidth]{fig7_standard_baselines.png}
+  \caption{Live comparison with conventional admission control. Bars show means and 95\% intervals across ten paired seeds. B1 uses an occupancy threshold, B2 static class reservation, and B3 their combination.}
+  \label{fig:standard-baselines}
+\end{figure*}
+
+Table~\ref{tab:class-baselines} exposes the reservation mechanism by preferred class. B2 reduces CPU-preferred blocking relative to B1 under Poisson (4.3\% versus 10.9\%) and MMPP (21.1\% versus 36.3\%), but increases GPU-preferred blocking to 27.7\% and 60.7\%. B3 strengthens this trade-off. Under drift, B2 and \method{} have similar CPU-preferred blocking (22.6\% and 22.9\%), yet B2's CPU expiry is 79.1\% versus 63.1\% and its CPU goodput is 0.085/s versus 0.175/s. Reservation alone protects admission opportunity but cannot ensure timely completion of the protected slow class.
+
+\begin{table*}[t]
+\centering
+\caption{Preferred-Class Blocking/Correct-Goodput (\% / s$^{-1}$)}
+\label{tab:class-baselines}
+\small
+\begin{tabular}{@{}llrrrr@{}}
+\toprule
+Scenario & Preferred class & \method{} & B1 occupancy & B2 reservation & B3 combined \\
+\midrule
+Poisson & GPU & $4.9/2.176$ & $11.6/2.020$ & $27.7/1.647$ & $44.9/1.248$ \\
+ & CPU & $5.0/0.479$ & $10.9/0.545$ & $4.3/0.552$ & $7.6/0.571$ \\
+MMPP & GPU & $29.1/1.522$ & $37.2/1.579$ & $60.7/0.972$ & $70.7/0.720$ \\
+ & CPU & $30.3/0.298$ & $36.3/0.427$ & $21.1/0.464$ & $27.7/0.461$ \\
+Rate/model drift & GPU & $24.1/1.747$ & $44.2/1.302$ & $64.6/0.795$ & $75.9/0.555$ \\
+ & CPU & $22.9/0.175$ & $39.3/0.093$ & $22.6/0.085$ & $34.2/0.093$ \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\subsection{Burst-Robust Replay}
+
+The burst-guarded variant places a token bucket before application-state admission. Tokens accrue at the target mean rate; a request may wait at most 2~s for a token, after which it is counted as a shaper drop. Figure~\ref{fig:burst-guard} reports MMPP rate 4/s with 20\% CPU preference. At capacities 4, 8, and 12, guarded broker blocking is $31.87\pm0.56$\%, $17.54\pm0.49$\%, and $9.36\pm0.45$\%. The token bucket reduces broker blocking to $0.97\pm0.12$\%, $0.005\pm0.010$\%, and zero, respectively.
+
+Broker blocking alone gives the wrong conclusion. Token-bucket total admission loss is $35.40\pm0.75$\%, $34.86\pm0.65$\%, and $34.72\pm0.87$\% because requests are discarded at the shaper; mean shaping delay is about $0.86\pm0.02$~s. At capacity 12, guarded goodput is $2.555\pm0.052$/s, whereas burst-guarded goodput is $1.836\pm0.025$/s. The implemented shaper protects broker state but fails to improve end-to-end admission utility for this MMPP. This negative boundary result motivates state estimation or reservation that can distinguish a transient burst from sustained overload rather than a fixed-rate bucket.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\columnwidth]{fig6_burst_guard.png}
+  \caption{MMPP replay with 95\% intervals. Token-bucket shaping nearly eliminates broker blocking, but total admission loss includes shaper drops and remains high.}
+  \label{fig:burst-guard}
+\end{figure}
+
+Under Poisson rate 4/s, replay shows a different operating region: guarded blocking falls from $6.01\pm0.22$\% at capacity four to $0.393\pm0.077$\% at eight and $0.0025\pm0.0028$\% at 12, with negligible expiry. Thus, capacity eight is compatible with the 5\% target for the measured Poisson profile but not for the MMPP. The contrast is consistent with the live matrix and clarifies that mean offered load is insufficient to characterize burst feasibility.
+
+\subsection{Answers to the Evaluation Questions}
+
+Q1: Class-conditioned selection beats compact for the three Qwen sizes but does not universally beat maximum context or transfer unchanged to Llama. Q2: Under stationary Poisson input, guarded control slightly improves goodput over fixed while trading more blocking for less expiry; under MMPP it is worse than fixed. Q3: Against the sweep-selected fixed deadline, guarded control improves blocking, expiry, and goodput during simultaneous rate/model drift. Q4: The measured Poisson slope satisfies the stated local Jury condition, whose assumptions exclude burst mismatch. Q5: millisecond PUBACK coexists with second-scale application completion and does not certify inference success. Q6: bounded-delay token-bucket shaping protects broker capacity but relocates enough loss to the shaper that total admission utility deteriorates under the tested MMPP. Q7: \method{} lowers blocking relative to all three conventional rules in every tested condition and provides the largest goodput under drift, but occupancy-threshold admission has higher goodput under MMPP by rejecting more work before execution.

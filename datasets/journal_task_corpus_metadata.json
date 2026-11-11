@@ -1,0 +1,344 @@
+{
+  "generatedAt": "2026-11-09T11:20:21.894Z",
+  "tasks": 240,
+  "calibration": 120,
+  "evaluation": 120,
+  "balanceCells": [
+    {
+      "split": "calibration",
+      "domain": "air",
+      "taskClass": "history",
+      "template": "A",
+      "n": 5
+    },
+    {
+      "split": "calibration",
+      "domain": "air",
+      "taskClass": "history",
+      "template": "B",
+      "n": 5
+    },
+    {
+      "split": "calibration",
+      "domain": "air",
+      "taskClass": "instant",
+      "template": "A",
+      "n": 5
+    },
+    {
+      "split": "calibration",
+      "domain": "air",
+      "taskClass": "instant",
+      "template": "B",
+      "n": 5
+    },
+    {
+      "split": "calibration",
+      "domain": "air",
+      "taskClass": "log",
+      "template": "A",
+      "n": 5
+    },
+    {
+      "split": "calibration",
+      "domain": "air",
+      "taskClass": "log",
+      "template": "B",
+      "n": 5
+    },
+    {
+      "split": "calibration",
+      "domain": "power",
+      "taskClass": "history",
+      "template": "A",
+      "n": 5
+    },
+    {
+      "split": "calibration",
+      "domain": "power",
+      "taskClass": "history",
+      "template": "B",
+      "n": 5
+    },
+    {
+      "split": "calibration",
+      "domain": "power",
+      "taskClass": "instant",
+      "template": "A",
+      "n": 5
+    },
+    {
+      "split": "calibration",
+      "domain": "power",
+      "taskClass": "instant",
+      "template": "B",
+      "n": 5
+    },
+    {
+      "split": "calibration",
+      "domain": "power",
+      "taskClass": "log",
+      "template": "A",
+      "n": 5
+    },
+    {
+      "split": "calibration",
+      "domain": "power",
+      "taskClass": "log",
+      "template": "B",
+      "n": 5
+    },
+    {
+      "split": "calibration",
+      "domain": "thermal",
+      "taskClass": "history",
+      "template": "A",
+      "n": 5
+    },
+    {
+      "split": "calibration",
+      "domain": "thermal",
+      "taskClass": "history",
+      "template": "B",
+      "n": 5
+    },
+    {
+      "split": "calibration",
+      "domain": "thermal",
+      "taskClass": "instant",
+      "template": "A",
+      "n": 5
+    },
+    {
+      "split": "calibration",
+      "domain": "thermal",
+      "taskClass": "instant",
+      "template": "B",
+      "n": 5
+    },
+    {
+      "split": "calibration",
+      "domain": "thermal",
+      "taskClass": "log",
+      "template": "A",
+      "n": 5
+    },
+    {
+      "split": "calibration",
+      "domain": "thermal",
+      "taskClass": "log",
+      "template": "B",
+      "n": 5
+    },
+    {
+      "split": "calibration",
+      "domain": "vibration",
+      "taskClass": "history",
+      "template": "A",
+      "n": 5
+    },
+    {
+      "split": "calibration",
+      "domain": "vibration",
+      "taskClass": "history",
+      "template": "B",
+      "n": 5
+    },
+    {
+      "split": "calibration",
+      "domain": "vibration",
+      "taskClass": "instant",
+      "template": "A",
+      "n": 5
+    },
+    {
+      "split": "calibration",
+      "domain": "vibration",
+      "taskClass": "instant",
+      "template": "B",
+      "n": 5
+    },
+    {
+      "split": "calibration",
+      "domain": "vibration",
+      "taskClass": "log",
+      "template": "A",
+      "n": 5
+    },
+    {
+      "split": "calibration",
+      "domain": "vibration",
+      "taskClass": "log",
+      "template": "B",
+      "n": 5
+    },
+    {
+      "split": "evaluation",
+      "domain": "air",
+      "taskClass": "history",
+      "template": "A",
+      "n": 5
+    },
+    {
+      "split": "evaluation",
+      "domain": "air",
+      "taskClass": "history",
+      "template": "B",
+      "n": 5
+    },
+    {
+      "split": "evaluation",
+      "domain": "air",
+      "taskClass": "instant",
+      "template": "A",
+      "n": 5
+    },
+    {
+      "split": "evaluation",
+      "domain": "air",
+      "taskClass": "instant",
+      "template": "B",
+      "n": 5
+    },
+    {
+      "split": "evaluation",
+      "domain": "air",
+      "taskClass": "log",
+      "template": "A",
+      "n": 5
+    },
+    {
+      "split": "evaluation",
+      "domain": "air",
+      "taskClass": "log",
+      "template": "B",
+      "n": 5
+    },
+    {
+      "split": "evaluation",
+      "domain": "power",
+      "taskClass": "history",
+      "template": "A",
+      "n": 5
+    },
+    {
+      "split": "evaluation",
+      "domain": "power",
+      "taskClass": "history",
+      "template": "B",
+      "n": 5
+    },
+    {
+      "split": "evaluation",
+      "domain": "power",
+      "taskClass": "instant",
+      "template": "A",
+      "n": 5
+    },
+    {
+      "split": "evaluation",
+      "domain": "power",
+      "taskClass": "instant",
+      "template": "B",
+      "n": 5
+    },
+    {
+      "split": "evaluation",
+      "domain": "power",
+      "taskClass": "log",
+      "template": "A",
+      "n": 5
+    },
+    {
+      "split": "evaluation",
+      "domain": "power",
+      "taskClass": "log",
+      "template": "B",
+      "n": 5
+    },
+    {
+      "split": "evaluation",
+      "domain": "thermal",
+      "taskClass": "history",
+      "template": "A",
+      "n": 5
+    },
+    {
+      "split": "evaluation",
+      "domain": "thermal",
+      "taskClass": "history",
+      "template": "B",
+      "n": 5
+    },
+    {
+      "split": "evaluation",
+      "domain": "thermal",
+      "taskClass": "instant",
+      "template": "A",
+      "n": 5
+    },
+    {
+      "split": "evaluation",
+      "domain": "thermal",
+      "taskClass": "instant",
+      "template": "B",
+      "n": 5
+    },
+    {
+      "split": "evaluation",
+      "domain": "thermal",
+      "taskClass": "log",
+      "template": "A",
+      "n": 5
+    },
+    {
+      "split": "evaluation",
+      "domain": "thermal",
+      "taskClass": "log",
+      "template": "B",
+      "n": 5
+    },
+    {
+      "split": "evaluation",
+      "domain": "vibration",
+      "taskClass": "history",
+      "template": "A",
+      "n": 5
+    },
+    {
+      "split": "evaluation",
+      "domain": "vibration",
+      "taskClass": "history",
+      "template": "B",
+      "n": 5
+    },
+    {
+      "split": "evaluation",
+      "domain": "vibration",
+      "taskClass": "instant",
+      "template": "A",
+      "n": 5
+    },
+    {
+      "split": "evaluation",
+      "domain": "vibration",
+      "taskClass": "instant",
+      "template": "B",
+      "n": 5
+    },
+    {
+      "split": "evaluation",
+      "domain": "vibration",
+      "taskClass": "log",
+      "template": "A",
+      "n": 5
+    },
+    {
+      "split": "evaluation",
+      "domain": "vibration",
+      "taskClass": "log",
+      "template": "B",
+      "n": 5
+    }
+  ]
+}

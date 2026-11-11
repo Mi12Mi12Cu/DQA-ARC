@@ -1,0 +1,8 @@
+# DQA-ARC does not use Python packages. This file records external runtimes.
+# Install JavaScript packages with: npm ci
+#
+# Node.js >= 20 (recorded: 24.22.1)
+# Eclipse Mosquitto = 2.1.2
+# Ollama = 0.40.14
+# MQTT.js = 5.14.1 (installed by npm)
+# MiKTeX/TeX Live with IEEEtran (paper compilation only)

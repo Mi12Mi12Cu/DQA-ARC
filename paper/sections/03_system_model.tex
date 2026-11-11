@@ -1,0 +1,54 @@
+\section{System and Protocol Model}
+\label{sec:system}
+
+\subsection{Entities and Controlled Resource}
+
+The system contains publishers, an MQTT~5 broker, a co-located application-state controller, and LLM subscribers. The controller runs as a separate Node.js process on the broker host and manages \emph{gateway/application-state capacity}; Mosquitto's native in-flight store remains unchanged. Co-location removes an avoidable wide-area hop but is not required by the protocol.
+
+For request $i$, the controller stores
+\begin{equation}
+ r_i=(id_i,c_i,t_i,D_i,x_i,z_i),
+\end{equation}
+where $id_i$ is the correlation identifier, $c_i\in\{g,c\}$ is the assigned GPU or CPU-only class, $t_i$ is admission time, $D_i$ is the application deadline, $x_i$ is the inference configuration, and $z_i$ is state. All records occupy one unit in this implementation; unequal byte sizes and multirate loss control are left to future work. With capacity $n$, an arrival that sees $n$ records is rejected immediately and receives an application response with status \texttt{blocked}.
+
+Let $S_{i}$ be elapsed time from admission until the controller observes the correlated completion. It includes broker-to-subscriber delivery, subscriber queueing, inference, and result publication. The record holding time is
+\begin{equation}
+ H_i=\min(S_i,D_i).
+ \label{eq:holding}
+\end{equation}
+If $S_i>D_i$, the record is released on expiry; a later result is logged as late and does not recreate state. Correct, on-time goodput counts completions that arrive before expiry, parse as valid JSON, and contain the correct task label.
+
+\subsection{Protocol Sequence}
+
+Figure~\ref{fig:sequence} shows the complete path. A publisher first subscribes to its response topic and sends a QoS~1 PUBLISH request containing Response Topic and Correlation Data. Mosquitto returns PUBACK according to MQTT rules. The controller independently receives the request event and either rejects it or creates $r_i$. On admission, it publishes a job to the selected subscriber-class topic with three MQTT~5 properties: Correlation Data, Message Expiry Interval, and User Properties encoding the application deadline, configuration, and class.
+
+The subscriber processes the job and publishes the result with the same Correlation Data. The controller correlates the result, releases $r_i$, and publishes a completion response. If the timer fires first, it releases $r_i$ and publishes an expiry response. The publisher-facing response is therefore an application message, never PUBACK/PUBREC/PUBCOMP.
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=0.98\textwidth]{fig5_mqtt_sequence.png}
+  \caption{MQTT--LLM application-state control workflow. The MQTT QoS acknowledgment is independent of application-level completion. The controller maintains bounded request state and releases it upon correlated LLM completion or deadline expiry.}
+  \label{fig:sequence}
+\end{figure*}
+
+Message Expiry Interval remains useful but has a narrower role. Per MQTT~5, the broker removes an expired message if onward delivery has not begun~\cite{oasis2019mqtt}. It does not keep a delivered request resident while an LLM executes. Equation~\eqref{eq:holding} is implemented by the controller's timer and completion correlation.
+
+\subsection{Traffic and Subscriber Classes}
+
+During a short control epoch $\Delta$, the feedforward model treats admitted attempts as a locally stationary Poisson process with rate $\lambda$. This approximation is intended for many independent, low-rate sources with randomized phases and no dominant source. Synchronized publishers, alarms, retries, and small source populations fall outside this regime. The implementation records the one-second index of dispersion
+\begin{equation}
+ I=\frac{\operatorname{Var}[N(1\ \mathrm{s})]}{\mathbb{E}[N(1\ \mathrm{s})]},
+\end{equation}
+and the evaluation treats large deviations from $I=1$ as evidence of mismatch rather than discarding the run.
+
+The two subscriber classes execute the same model and task but use different Ollama endpoints: one may use the RTX~3060 GPU, while the other is explicitly forced to CPU-only execution on the same host. The principal live matrix uses Qwen2.5--3B, and the drift condition changes both endpoints to Qwen2.5--7B halfway through a run. This design isolates execution-class heterogeneity without falsely claiming two physical edge devices. Class preference is drawn independently for each arrival with CPU fraction $p_c$; the guarded policy may reroute a request if its preferred queue is predicted to miss a class-specific feasibility floor.
+
+\subsection{Objective and Metrics}
+
+The controller operates under three competing outcomes:
+\begin{align}
+ B_{\mathrm{app}} &= \frac{N_{\mathrm{blocked}}}{N_{\mathrm{published}}},\\
+ E_{\mathrm{adm}} &= \frac{N_{\mathrm{expired}}}{N_{\mathrm{admitted}}},\\
+ G_Q &= \frac{N_{\mathrm{correct,on\mbox{-}time}}}{T_{\mathrm{run}}}.
+\end{align}
+Reducing $D$ may reduce $B_{\mathrm{app}}$ while increasing $E_{\mathrm{adm}}$; increasing it may do the reverse. Hence blocking alone is not a sufficient objective. We report all three metrics, strict on-time accuracy, MQTT PUBACK latency, end-to-end completion latency, occupancy, rerouting, and process memory. The design goal is high $G_Q$ with explicit visibility into whether capacity is protected by successful completion, expiry, or admission shedding.

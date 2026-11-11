@@ -1,0 +1,140 @@
+\section{Deadline, Routing, and Quality Control}
+\label{sec:controller}
+
+\subsection{Conditional Loss-Model Feedforward}
+
+For $n$ equal application records and offered load $A$, Erlang--B is evaluated by the stable recursion
+\begin{equation}
+ B_0(A)=1,\qquad B_j(A)=\frac{A B_{j-1}(A)}{j+A B_{j-1}(A)}.
+ \label{eq:erlang-recursion}
+\end{equation}
+Numerical bisection gives $A_\alpha(n)$ such that $B_n(A_\alpha)=\alpha$. This computation is performed once per capacity/target pair; it is a model input, not an experimental result.
+
+At epoch $k$, containing $N_k$ arrivals, the implementation updates
+\begin{align}
+ \widehat\lambda_k&=(1-\beta)\widehat\lambda_{k-1}+\beta N_k/\Delta,\\
+ \lambda_k^{U}&=\widehat\lambda_k+z\sqrt{\max(\widehat\lambda_k,0.01)/\Delta},
+ \label{eq:rate-upper}
+\end{align}
+with $\beta=0.5$ and $z=1.645$. Equation~\eqref{eq:rate-upper} is a one-sided Poisson-inspired margin, not a distribution-free confidence bound; its failure under MMPP traffic is measured in Section~\ref{sec:evaluation}. The feedforward mean holding-time budget is
+\begin{equation}
+ m_k^{\max}=\frac{A_\alpha(n)}{\lambda_k^{U}}.
+ \label{eq:mean-budget}
+\end{equation}
+
+The \emph{analytical} baseline clips $D=m_k^{\max}$ directly. This equality is accurate only in a timeout-dominated regime; when jobs frequently finish before $D$, $\mathbb{E}[\min(S,D)]\neq D$. Comparing this baseline with empirical inversion quantifies the calibration error.
+
+\subsection{Empirical Truncated-Mean Calibration}
+
+For class $h$ and candidate configuration $x$, let $S_{h,x}$ denote measured completion time. From rolling samples $s_{h,x,1},\ldots,s_{h,x,M}$,
+\begin{equation}
+ \widehat m_{h,x}(D)=\frac{1}{M}\sum_{j=1}^{M}\min(s_{h,x,j},D).
+ \label{eq:empirical-truncated}
+\end{equation}
+This estimator follows from
+\begin{equation}
+ \mathbb{E}[\min(S,D)]=\int_0^D \Pr(S>t)\,dt
+\end{equation}
+and is monotone in $D$. For current class fractions $p_{h,k}$ and selected configurations $x_h$, the calibrated feedforward deadline is the largest value in $[D_{\min},D_{\max}]$ satisfying
+\begin{equation}
+ \sum_h p_{h,k}\widehat m_{h,x_h}(D_k^{\mathrm{ff}})\le m_k^{\max}.
+ \label{eq:mixture-inversion}
+\end{equation}
+The implementation solves~\eqref{eq:mixture-inversion} by bisection. Calibration profiles seed the estimator; completed live jobs are appended to a rolling window of 200 samples per class/configuration.
+
+\subsection{Feedback and Rate Limiting}
+
+Let $\widehat B_k$ be the epoch blocking fraction and
+\begin{equation}
+ \widetilde B_k=0.7\widetilde B_{k-1}+0.3\widehat B_k.
+\end{equation}
+The feedback candidate is
+\begin{equation}
+ D_{k+1}^{\mathrm{fb}}=\operatorname{clip}\left[
+ D_k\exp\{\eta(\alpha-\widetilde B_k)\},D_{\min},D_{\max}\right]
+ \label{eq:feedback}
+\end{equation}
+with $\eta=1.5$. The adaptive and guarded policies choose the more conservative of $D^{\mathrm{ff}}$ and $D^{\mathrm{fb}}$, then constrain one-epoch change to $[0.7D_k,1.3D_k]$. Every experiment uses $\Delta=4$~s, $D_{\min}=0.25$~s, and $D_{\max}=8$~s.
+
+The following proposition states a local guarantee for the feedback component. It is deliberately conditional: no mean-rate controller can guarantee a target under arbitrary nonstationary bursts and finite capacity.
+
+\textbf{Proposition 1 (local feedback stability).} Let $x_k=\log D_k$, let $b(x)$ be the differentiable steady blocking response near an unclipped equilibrium $x^*$ with $b(x^*)=\alpha$, and let $g=b'(x^*)>0$. If the feedforward minimum, clipping, and rate limiter are locally inactive, the smoothed feedback loop is locally asymptotically stable when
+\begin{equation}
+ 0<\eta(1-a)g<2(1+a), \qquad a=0.7.
+ \label{eq:stability-condition}
+\end{equation}
+
+\emph{Proof.} Linearizing the update that first forms $\widetilde B_{k+1}=a\widetilde B_k+(1-a)b(x_k)$ and then applies $x_{k+1}=x_k+\eta(\alpha-\widetilde B_{k+1})$ gives
+\begin{equation}
+ \begin{bmatrix}\delta x_{k+1}\\ \delta\widetilde B_{k+1}\end{bmatrix}
+ =
+ \begin{bmatrix}
+ 1-\eta(1-a)g & -\eta a\\
+ (1-a)g & a
+ \end{bmatrix}
+ \begin{bmatrix}\delta x_k\\ \delta\widetilde B_k\end{bmatrix}.
+\end{equation}
+The matrix has determinant $a$ and trace $1+a-\eta(1-a)g$. The second-order Jury conditions yield $0<a<1$ and~\eqref{eq:stability-condition}. \hfill$\square$
+
+Independently of this local condition, clipping makes $D_k\in[D_{\min},D_{\max}]$ invariant and the rate limiter bounds each multiplicative update. Section~\ref{sec:evaluation} estimates $g$ from the fixed-deadline sweep and evaluates the implemented gain. The \emph{adaptive} policy without a feasibility guard remains an ablation for measuring how a stable blocking loop can nevertheless choose deadlines below useful completion times.
+
+\subsection{Class-Aware Feasibility Guard and Routing}
+
+Mean-holding-time control can select a common deadline below the useful tail of a slow class. For a new request with $q_h$ jobs ahead of it, including an in-service job, the guarded policy uses the measured FIFO completion bound
+\begin{equation}
+ F_h(x,q_h)=\max\{D_{\min},Q_{0.95}(S_{h,x})+q_h\overline S_{h,x}+\delta_{\mathrm{msg}}\}.
+ \label{eq:floors}
+\end{equation}
+Every term has a direct interpretation: one tail service time for the arriving job, mean measured service for work ahead, and a messaging/event-loop reserve. The implementation uses $\delta_{\mathrm{msg}}=0.05$~s; live event traces separately report the empirical p99 of end-to-end time minus subscriber wall time so this reserve can be audited.
+
+The controller keeps the preferred class when $F_h\le D_{\max}$. Otherwise it selects a feasible alternative with the smallest normalized predicted workload; if neither class is feasible, it selects the smaller predicted completion time and records the infeasible admission. The admitted record receives
+\begin{equation}
+ D_i=\min\{D_{\max},\max(D_k,F_h(x_i,q_h))\}.
+ \label{eq:record-deadline}
+\end{equation}
+Thus the common control state can respond to load, while a single slow class is not automatically assigned a deadline known to be infeasible. Admission capacity remains global; a route change does not create an additional record.
+
+\subsection{Quality-Aware Inference Configuration}
+
+The evaluated configuration set is
+\begin{equation}
+\begin{split}
+ \mathcal X={}&\{\text{compact, standard, extended}\}\\
+ &\times\{16,24,48\text{ output tokens}\}.
+\end{split}
+\end{equation}
+Outputs below 16 tokens serve only as truncation checks and are not candidate configurations. Compact context contains the current numeric event; standard context adds the conditional history/log rules; extended context adds request-specific history or unstructured evidence together with archived distractors. For a configuration $x$, execution class $h$, task class $c$, and deadline $D_i$, feasibility requires
+\begin{equation}
+ \widehat Q_{0.95}(S_{h,x})+\delta\le D_i,\qquad \delta=0.05\ \mathrm{s}.
+\end{equation}
+Among feasible configurations, the subscriber selects the one with greatest calibration strict accuracy for task class $c$, then JSON validity, then smaller p95 latency and prompt size. Strict accuracy requires both the correct action and syntactically valid JSON. If none is feasible, the least-late candidate is used and the outcome remains visible in expiry/error metrics.
+
+Three baselines characterize the effect of selection. \emph{Static compact} always selects compact--24, \emph{static maximum context} always selects extended--48, and \emph{token-max} selects the feasible candidate with the largest prompt-plus-output budget. None receives access to held-out labels. The live ablation compares all four allocators under identical traffic seeds and controller settings.
+
+\subsection{Policy and Conventional Baseline Summary}
+
+Three conventional admission rules provide comparators that do not use service profiles, feedback, or queue-aware rerouting. Let $o$ be current application-record occupancy, let $n=8$, let the fixed occupancy threshold be $\theta=\lceil0.75n\rceil=6$, and let $r=\lceil0.2n\rceil=2$ slots be reserved against the majority GPU-preferred class. CPU-preferred requests are the protected class because their measured service is slower and they comprise 20\% of arrivals. The parameters are fixed before the test seeds and are not selected from their outcomes.
+
+The \emph{occupancy-threshold} baseline (B1) admits either class iff $o<\theta$. The \emph{static-reservation} baseline (B2), a guard-channel rule from classical finite-capacity admission control~\cite{kelly1991loss}, admits CPU-preferred work iff $o<n$ and GPU-preferred work iff $o<n-r$. The \emph{threshold--reservation} baseline (B3) combines both restrictions: it admits CPU-preferred work iff $o<\theta$ and GPU-preferred work iff $o<\theta-r$. All three use the same profiled quality-aware inference allocator as \method{} and a fixed 8-s application deadline. Hence their comparison isolates admission/deadline control rather than prompt selection.
+
+Table~\ref{tab:policies} separates the components.
+
+\begin{table}[t]
+\centering
+\caption{Evaluated Deadline Policies}
+\label{tab:policies}
+\footnotesize
+\begin{tabular}{@{}lccc@{}}
+\toprule
+Policy & Calibrated & Feedback & Class guard \\
+\midrule
+Fixed & no & no & no \\
+Analytical & no ($D=m^{\max}$) & no & no \\
+Calibrated & yes & no & no \\
+Adaptive & yes & yes & no \\
+Guarded (\method{}) & yes & yes & yes \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The deadline policies and conventional baselines share capacity, profile samples, and the same task/arrival trace in each paired seed. Their differences therefore reflect admission and deadline control rather than different offered workloads.

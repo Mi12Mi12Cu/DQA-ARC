@@ -1,0 +1,48 @@
+\documentclass[journal]{IEEEtran}
+
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{url}
+\usepackage{xcolor}
+\usepackage{cite}
+\usepackage{microtype}
+
+\graphicspath{{figures/}}
+\newcommand{\method}{DQA-ARC}
+\newcommand{\etal}{et al.}
+\newcommand{\artifacturl}{\texttt{ANONYMIZED-ARTIFACT-URL}}
+
+\title{Deadline- and Quality-Aware Application-State Control for MQTT--LLM Pipelines}
+
+\author{Miracle Udurume, Vladimir Shakhov, and Insoo Koo%
+\thanks{M. Udurume and I. Koo are with the Department of Electrical, Electronics and Computer Engineering, University of Ulsan, Ulsan, Republic of Korea (e-mail: udurumemiracle@gmail.com; iskoo@ulsan.ac.kr).}%
+\thanks{V. Shakhov is with the Institute for Information Transmission Problems (IITP RAS), Russian Academy of Sciences, Moscow, Russia (e-mail: Vladimir.Shakhov@gmail.com).}}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+MQTT brokers acknowledge protocol delivery, not completion of downstream large-language-model (LLM) inference. A system that retains state until inference finishes therefore needs an explicit application-layer completion mechanism. We present the Deadline- and Quality-Aware Application-state Retention Controller (\method{}) for bounded application state in MQTT--LLM pipelines. MQTT~5 Response Topic and Correlation Data properties carry a separate completion message, while a co-located controller releases each admitted record on correlated completion or expiry. An Erlang--B calculation supplies a conditional feedforward budget; the controller maps that budget to a deadline by inverting the empirical truncated mean of measured completion time, adds blocking feedback, enforces class-specific latency floors, and may reroute work across GPU and CPU-only execution classes. Subscribers choose among measured prompt/output configurations by held-out task accuracy subject to a tail-latency constraint, and full context-window use is optional.
+
+We implement the design with Mosquitto~2.1.2, MQTT~5/QoS~1 clients, and Ollama~0.40.14. The study contains 310 live broker--LLM runs, 10,800 profiled inferences across Qwen2.5--1.5B/3B/7B and Llama~3.1--8B, and 9,800 empirical-replay runs. Conventional comparators comprise occupancy-threshold admission, static class reservation, and their combination. Across ten paired seeds per condition, 
+\method{} has lower blocking than every conventional comparator under Poisson, MMPP, and simultaneous arrival-rate/model-service drift (all two-sided exact $p=0.00195$). Under drift it increases correct on-time goodput by 0.527/s over occupancy-threshold admission and by 1.273/s over the combined baseline (both $p=0.00195$). The result is not universal dominance: under MMPP, occupancy-threshold admission yields 0.186/s more goodput ($p=0.0215$) by blocking 7.66 percentage points more traffic and nearly eliminating post-admission expiry. A fixed-deadline sweep likewise shows no guarded advantage over the best fixed value in stationary traffic. Class-conditioned allocation beats static compact selection but not maximum-context or token-max selection on the live Qwen2.5--3B study. The results identify the useful changing-load regime and quantify the blocking--expiry trade-off under bursts.
+\end{abstract}
+
+\begin{IEEEkeywords}
+MQTT, large language models, admission control, deadline control, heterogeneous inference, empirical calibration.
+\end{IEEEkeywords}
+
+\input{sections/01_introduction}
+\input{sections/02_related_work}
+\input{sections/03_system_model}
+\input{sections/04_controller}
+\input{sections/05_evaluation}
+\input{sections/06_discussion}
+
+\bibliographystyle{IEEEtran}
+\IEEEtriggeratref{25}
+\bibliography{references}
+
+\end{document}

@@ -1,0 +1,83 @@
+{
+  "metadata": {
+    "startedAt": "2026-11-09T10:04:55.736Z",
+    "finishedAt": "2026-11-09T10:06:11.985Z",
+    "mosquittoVersion": "2.1.2",
+    "ollamaVersion": "0.40.14",
+    "model": "qwen2.5:3b",
+    "brokerPid": 67804,
+    "profileFile": "C:\\Users\\MCSL\\Desktop\\Miracle PhD folder\\Codes\\Adaptive Retention Control for MQTT Broker\\results\\profiles\\profile_both_calibration_20261109T031430Z.jsonl",
+    "config": {
+      "policy": "guarded",
+      "allocator": "quality-aware",
+      "traffic": "rate-step",
+      "durationSeconds": 60,
+      "meanRate": 4,
+      "capacity": 8,
+      "alpha": 0.05,
+      "fixedDeadline": 8,
+      "minDeadline": 0.25,
+      "maxDeadline": 8,
+      "epochSeconds": 4,
+      "cpuFraction": 0.2,
+      "seed": 705,
+      "model": "qwen2.5:3b",
+      "driftModel": "qwen2.5:7b",
+      "driftAtSeconds": 30,
+      "controllerGain": 1.5,
+      "messagingReserveSeconds": 0.05,
+      "campaign": "journal-drift",
+      "sampleGpuEnergy": false,
+      "profileFile": "results/profiles/profile_both_calibration_20261109T031430Z.jsonl",
+      "brokerPort": 18884,
+      "mosquittoPath": "C:\\Program Files\\mosquitto\\mosquitto.exe"
+    },
+    "offeredLoadTarget": 4.542959407058387,
+    "generatedArrivals": 246,
+    "realizedMeanRate": 4.1,
+    "oneSecondCountDispersion": {
+      "mean": 4.1,
+      "variance": 7.684745762711862,
+      "index": 1.8743282348077714
+    },
+    "trafficStateCoverage": {
+      "type": "rate-step",
+      "transitions": 0,
+      "lowStateSeconds": null,
+      "highStateSeconds": null,
+      "visitedLow": null,
+      "visitedHigh": null
+    }
+  },
+  "counts": {
+    "published": 246,
+    "admitted": 181,
+    "blocked": 65,
+    "expired": 20,
+    "completed": 161,
+    "completedOnTime": 161,
+    "correctOnTime": 122,
+    "correctOnTimeGpu": 117,
+    "correctOnTimeCpu": 5,
+    "late": 20,
+    "rerouted": 8,
+    "errors": 0
+  },
+  "metrics": {
+    "applicationBlocking": 0.26422764227642276,
+    "expiryAmongAdmitted": 0.11049723756906077,
+    "onTimeCompletionAmongAdmitted": 0.8895027624309392,
+    "qualityAdjustedGoodput": 2.033333333333333,
+    "onTimeAccuracy": 0.7577639751552795,
+    "protocolAckMeanMs": 0.9466593495934285,
+    "protocolAckP95Ms": 1.7262250000003405,
+    "maxOccupancy": 8,
+    "meanOccupancy": 3.5866666666666664,
+    "brokerPeakRssMiB": 0,
+    "nodePeakRssMiB": 81.0234375,
+    "idleGpuPowerWatts": null,
+    "gpuBoardEnergyJoules": 0,
+    "gpuDynamicEnergyJoules": 0,
+    "gpuDynamicJoulesPerCorrectGpuResult": 0
+  }
+}

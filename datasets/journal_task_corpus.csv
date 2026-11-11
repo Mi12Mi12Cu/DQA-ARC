@@ -1,0 +1,241 @@
+id,corpusVersion,split,domain,taskClass,template,metric,value,unit,expected,history,evidenceType,evidence
+thermal-instant-01,journal-v2,calibration,thermal,instant,A,bearing temperature,23,degrees Celsius,NORMAL,,,
+thermal-history-01,journal-v2,calibration,thermal,history,A,bearing temperature,23,degrees Celsius,MONITOR,13|17|23,,
+thermal-log-01,journal-v2,calibration,thermal,log,A,bearing temperature,23,degrees Celsius,SHUTDOWN,,critical,Operator note: acrid burning odor is persistent; device log repeats CRITICAL insulation fault.
+thermal-instant-02,journal-v2,evaluation,thermal,instant,A,bearing temperature,36,degrees Celsius,NORMAL,,,
+thermal-history-02,journal-v2,evaluation,thermal,history,A,bearing temperature,36,degrees Celsius,MONITOR,25|30|36,,
+thermal-log-02,journal-v2,evaluation,thermal,log,A,bearing temperature,36,degrees Celsius,SHUTDOWN,,critical,Operator note: acrid burning odor is persistent; device log repeats CRITICAL insulation fault.
+thermal-instant-03,journal-v2,calibration,thermal,instant,B,bearing temperature,48,degrees Celsius,NORMAL,,,
+thermal-history-03,journal-v2,calibration,thermal,history,B,bearing temperature,48,degrees Celsius,NORMAL,44|46|48,,
+thermal-log-03,journal-v2,calibration,thermal,log,B,bearing temperature,48,degrees Celsius,MONITOR,,alert,Operator note: abnormal odor reported once; device log flags corroborated anomaly.
+thermal-instant-04,journal-v2,evaluation,thermal,instant,B,bearing temperature,49,degrees Celsius,NORMAL,,,
+thermal-history-04,journal-v2,evaluation,thermal,history,B,bearing temperature,49,degrees Celsius,NORMAL,45|47|49,,
+thermal-log-04,journal-v2,evaluation,thermal,log,B,bearing temperature,49,degrees Celsius,MONITOR,,alert,Operator note: abnormal odor reported once; device log flags corroborated anomaly.
+thermal-instant-05,journal-v2,calibration,thermal,instant,A,bearing temperature,50,degrees Celsius,MONITOR,,,
+thermal-history-05,journal-v2,calibration,thermal,history,A,bearing temperature,50,degrees Celsius,ALERT,40|44|50,,
+thermal-log-05,journal-v2,calibration,thermal,log,A,bearing temperature,50,degrees Celsius,MONITOR,,benign,Routine note: no visible hazard; device self-test passed and the earlier message was archived.
+thermal-instant-06,journal-v2,evaluation,thermal,instant,A,bearing temperature,58,degrees Celsius,MONITOR,,,
+thermal-history-06,journal-v2,evaluation,thermal,history,A,bearing temperature,58,degrees Celsius,ALERT,47|52|58,,
+thermal-log-06,journal-v2,evaluation,thermal,log,A,bearing temperature,58,degrees Celsius,MONITOR,,benign,Routine note: no visible hazard; device self-test passed and the earlier message was archived.
+thermal-instant-07,journal-v2,calibration,thermal,instant,B,bearing temperature,64,degrees Celsius,MONITOR,,,
+thermal-history-07,journal-v2,calibration,thermal,history,B,bearing temperature,64,degrees Celsius,ALERT,52|57|64,,
+thermal-log-07,journal-v2,calibration,thermal,log,B,bearing temperature,64,degrees Celsius,SHUTDOWN,,critical,Operator note: acrid burning odor is persistent; device log repeats CRITICAL insulation fault.
+thermal-instant-08,journal-v2,evaluation,thermal,instant,B,bearing temperature,54,degrees Celsius,MONITOR,,,
+thermal-history-08,journal-v2,evaluation,thermal,history,B,bearing temperature,54,degrees Celsius,ALERT,41|47|54,,
+thermal-log-08,journal-v2,evaluation,thermal,log,B,bearing temperature,54,degrees Celsius,SHUTDOWN,,critical,Operator note: acrid burning odor is persistent; device log repeats CRITICAL insulation fault.
+thermal-instant-09,journal-v2,calibration,thermal,instant,A,bearing temperature,65,degrees Celsius,ALERT,,,
+thermal-history-09,journal-v2,calibration,thermal,history,A,bearing temperature,65,degrees Celsius,ALERT,61|63|65,,
+thermal-log-09,journal-v2,calibration,thermal,log,A,bearing temperature,65,degrees Celsius,SHUTDOWN,,alert,Operator note: abnormal odor reported once; device log flags corroborated anomaly.
+thermal-instant-10,journal-v2,evaluation,thermal,instant,A,bearing temperature,70,degrees Celsius,ALERT,,,
+thermal-history-10,journal-v2,evaluation,thermal,history,A,bearing temperature,70,degrees Celsius,ALERT,66|68|70,,
+thermal-log-10,journal-v2,evaluation,thermal,log,A,bearing temperature,70,degrees Celsius,SHUTDOWN,,alert,Operator note: abnormal odor reported once; device log flags corroborated anomaly.
+thermal-instant-11,journal-v2,calibration,thermal,instant,B,bearing temperature,78,degrees Celsius,ALERT,,,
+thermal-history-11,journal-v2,calibration,thermal,history,B,bearing temperature,78,degrees Celsius,SHUTDOWN,66|71|78,,
+thermal-log-11,journal-v2,calibration,thermal,log,B,bearing temperature,78,degrees Celsius,ALERT,,benign,Routine note: no visible hazard; device self-test passed and the earlier message was archived.
+thermal-instant-12,journal-v2,evaluation,thermal,instant,B,bearing temperature,75,degrees Celsius,ALERT,,,
+thermal-history-12,journal-v2,evaluation,thermal,history,B,bearing temperature,75,degrees Celsius,SHUTDOWN,62|68|75,,
+thermal-log-12,journal-v2,evaluation,thermal,log,B,bearing temperature,75,degrees Celsius,ALERT,,benign,Routine note: no visible hazard; device self-test passed and the earlier message was archived.
+thermal-instant-13,journal-v2,calibration,thermal,instant,A,bearing temperature,80,degrees Celsius,SHUTDOWN,,,
+thermal-history-13,journal-v2,calibration,thermal,history,A,bearing temperature,80,degrees Celsius,SHUTDOWN,70|74|80,,
+thermal-log-13,journal-v2,calibration,thermal,log,A,bearing temperature,80,degrees Celsius,SHUTDOWN,,critical,Operator note: acrid burning odor is persistent; device log repeats CRITICAL insulation fault.
+thermal-instant-14,journal-v2,evaluation,thermal,instant,A,bearing temperature,83,degrees Celsius,SHUTDOWN,,,
+thermal-history-14,journal-v2,evaluation,thermal,history,A,bearing temperature,83,degrees Celsius,SHUTDOWN,72|77|83,,
+thermal-log-14,journal-v2,evaluation,thermal,log,A,bearing temperature,83,degrees Celsius,SHUTDOWN,,critical,Operator note: acrid burning odor is persistent; device log repeats CRITICAL insulation fault.
+thermal-instant-15,journal-v2,calibration,thermal,instant,B,bearing temperature,88,degrees Celsius,SHUTDOWN,,,
+thermal-history-15,journal-v2,calibration,thermal,history,B,bearing temperature,88,degrees Celsius,SHUTDOWN,84|86|88,,
+thermal-log-15,journal-v2,calibration,thermal,log,B,bearing temperature,88,degrees Celsius,SHUTDOWN,,alert,Operator note: abnormal odor reported once; device log flags corroborated anomaly.
+thermal-instant-16,journal-v2,evaluation,thermal,instant,B,bearing temperature,95,degrees Celsius,SHUTDOWN,,,
+thermal-history-16,journal-v2,evaluation,thermal,history,B,bearing temperature,95,degrees Celsius,SHUTDOWN,91|93|95,,
+thermal-log-16,journal-v2,evaluation,thermal,log,B,bearing temperature,95,degrees Celsius,SHUTDOWN,,alert,Operator note: abnormal odor reported once; device log flags corroborated anomaly.
+thermal-instant-17,journal-v2,calibration,thermal,instant,A,bearing temperature,30,degrees Celsius,NORMAL,,,
+thermal-history-17,journal-v2,calibration,thermal,history,A,bearing temperature,30,degrees Celsius,MONITOR,20|24|30,,
+thermal-log-17,journal-v2,calibration,thermal,log,A,bearing temperature,30,degrees Celsius,NORMAL,,benign,Routine note: no visible hazard; device self-test passed and the earlier message was archived.
+thermal-instant-18,journal-v2,evaluation,thermal,instant,A,bearing temperature,45,degrees Celsius,NORMAL,,,
+thermal-history-18,journal-v2,evaluation,thermal,history,A,bearing temperature,45,degrees Celsius,MONITOR,34|39|45,,
+thermal-log-18,journal-v2,evaluation,thermal,log,A,bearing temperature,45,degrees Celsius,NORMAL,,benign,Routine note: no visible hazard; device self-test passed and the earlier message was archived.
+thermal-instant-19,journal-v2,calibration,thermal,instant,B,bearing temperature,100,degrees Celsius,SHUTDOWN,,,
+thermal-history-19,journal-v2,calibration,thermal,history,B,bearing temperature,100,degrees Celsius,SHUTDOWN,88|93|100,,
+thermal-log-19,journal-v2,calibration,thermal,log,B,bearing temperature,100,degrees Celsius,SHUTDOWN,,critical,Operator note: acrid burning odor is persistent; device log repeats CRITICAL insulation fault.
+thermal-instant-20,journal-v2,evaluation,thermal,instant,B,bearing temperature,90,degrees Celsius,SHUTDOWN,,,
+thermal-history-20,journal-v2,evaluation,thermal,history,B,bearing temperature,90,degrees Celsius,SHUTDOWN,77|83|90,,
+thermal-log-20,journal-v2,evaluation,thermal,log,B,bearing temperature,90,degrees Celsius,SHUTDOWN,,critical,Operator note: acrid burning odor is persistent; device log repeats CRITICAL insulation fault.
+air-instant-01,journal-v2,calibration,air,instant,A,smoke concentration,7,ppm,NORMAL,,,
+air-history-01,journal-v2,calibration,air,history,A,smoke concentration,7,ppm,MONITOR,0|0|7,,
+air-log-01,journal-v2,calibration,air,log,A,smoke concentration,7,ppm,SHUTDOWN,,critical,Shift report: visible smoke confirmed at the enclosure; gateway log reports CRITICAL combustion signature.
+air-instant-02,journal-v2,evaluation,air,instant,A,smoke concentration,11,ppm,NORMAL,,,
+air-history-02,journal-v2,evaluation,air,history,A,smoke concentration,11,ppm,MONITOR,0|0|11,,
+air-log-02,journal-v2,evaluation,air,log,A,smoke concentration,11,ppm,SHUTDOWN,,critical,Shift report: visible smoke confirmed at the enclosure; gateway log reports CRITICAL combustion signature.
+air-instant-03,journal-v2,calibration,air,instant,B,smoke concentration,13,ppm,NORMAL,,,
+air-history-03,journal-v2,calibration,air,history,B,smoke concentration,13,ppm,NORMAL,5|9|13,,
+air-log-03,journal-v2,calibration,air,log,B,smoke concentration,13,ppm,MONITOR,,alert,Shift report: intermittent haze observed; two sensors flag a corroborated anomaly.
+air-instant-04,journal-v2,evaluation,air,instant,B,smoke concentration,14,ppm,NORMAL,,,
+air-history-04,journal-v2,evaluation,air,history,B,smoke concentration,14,ppm,NORMAL,6|10|14,,
+air-log-04,journal-v2,evaluation,air,log,B,smoke concentration,14,ppm,MONITOR,,alert,Shift report: intermittent haze observed; two sensors flag a corroborated anomaly.
+air-instant-05,journal-v2,calibration,air,instant,A,smoke concentration,15,ppm,MONITOR,,,
+air-history-05,journal-v2,calibration,air,history,A,smoke concentration,15,ppm,ALERT,0|5|15,,
+air-log-05,journal-v2,calibration,air,log,A,smoke concentration,15,ppm,MONITOR,,benign,Operator report: area is clear; gateway log says diagnostic exercise only.
+air-instant-06,journal-v2,evaluation,air,instant,A,smoke concentration,28,ppm,MONITOR,,,
+air-history-06,journal-v2,evaluation,air,history,A,smoke concentration,28,ppm,ALERT,8|17|28,,
+air-log-06,journal-v2,evaluation,air,log,A,smoke concentration,28,ppm,MONITOR,,benign,Operator report: area is clear; gateway log says diagnostic exercise only.
+air-instant-07,journal-v2,calibration,air,instant,B,smoke concentration,39,ppm,MONITOR,,,
+air-history-07,journal-v2,calibration,air,history,B,smoke concentration,39,ppm,ALERT,17|27|39,,
+air-log-07,journal-v2,calibration,air,log,B,smoke concentration,39,ppm,SHUTDOWN,,critical,Shift report: visible smoke confirmed at the enclosure; gateway log reports CRITICAL combustion signature.
+air-instant-08,journal-v2,evaluation,air,instant,B,smoke concentration,21,ppm,MONITOR,,,
+air-history-08,journal-v2,evaluation,air,history,B,smoke concentration,21,ppm,ALERT,0|8|21,,
+air-log-08,journal-v2,evaluation,air,log,B,smoke concentration,21,ppm,SHUTDOWN,,critical,Shift report: visible smoke confirmed at the enclosure; gateway log reports CRITICAL combustion signature.
+air-instant-09,journal-v2,calibration,air,instant,A,smoke concentration,40,ppm,ALERT,,,
+air-history-09,journal-v2,calibration,air,history,A,smoke concentration,40,ppm,ALERT,32|36|40,,
+air-log-09,journal-v2,calibration,air,log,A,smoke concentration,40,ppm,SHUTDOWN,,alert,Shift report: intermittent haze observed; two sensors flag a corroborated anomaly.
+air-instant-10,journal-v2,evaluation,air,instant,A,smoke concentration,54,ppm,ALERT,,,
+air-history-10,journal-v2,evaluation,air,history,A,smoke concentration,54,ppm,ALERT,46|50|54,,
+air-log-10,journal-v2,evaluation,air,log,A,smoke concentration,54,ppm,SHUTDOWN,,alert,Shift report: intermittent haze observed; two sensors flag a corroborated anomaly.
+air-instant-11,journal-v2,calibration,air,instant,B,smoke concentration,78,ppm,ALERT,,,
+air-history-11,journal-v2,calibration,air,history,B,smoke concentration,78,ppm,SHUTDOWN,56|66|78,,
+air-log-11,journal-v2,calibration,air,log,B,smoke concentration,78,ppm,ALERT,,benign,Operator report: area is clear; gateway log says diagnostic exercise only.
+air-instant-12,journal-v2,evaluation,air,instant,B,smoke concentration,66,ppm,ALERT,,,
+air-history-12,journal-v2,evaluation,air,history,B,smoke concentration,66,ppm,SHUTDOWN,43|53|66,,
+air-log-12,journal-v2,evaluation,air,log,B,smoke concentration,66,ppm,ALERT,,benign,Operator report: area is clear; gateway log says diagnostic exercise only.
+air-instant-13,journal-v2,calibration,air,instant,A,smoke concentration,80,ppm,SHUTDOWN,,,
+air-history-13,journal-v2,calibration,air,history,A,smoke concentration,80,ppm,SHUTDOWN,61|70|80,,
+air-log-13,journal-v2,calibration,air,log,A,smoke concentration,80,ppm,SHUTDOWN,,critical,Shift report: visible smoke confirmed at the enclosure; gateway log reports CRITICAL combustion signature.
+air-instant-14,journal-v2,evaluation,air,instant,A,smoke concentration,83,ppm,SHUTDOWN,,,
+air-history-14,journal-v2,evaluation,air,history,A,smoke concentration,83,ppm,SHUTDOWN,63|72|83,,
+air-log-14,journal-v2,evaluation,air,log,A,smoke concentration,83,ppm,SHUTDOWN,,critical,Shift report: visible smoke confirmed at the enclosure; gateway log reports CRITICAL combustion signature.
+air-instant-15,journal-v2,calibration,air,instant,B,smoke concentration,88,ppm,SHUTDOWN,,,
+air-history-15,journal-v2,calibration,air,history,B,smoke concentration,88,ppm,SHUTDOWN,80|84|88,,
+air-log-15,journal-v2,calibration,air,log,B,smoke concentration,88,ppm,SHUTDOWN,,alert,Shift report: intermittent haze observed; two sensors flag a corroborated anomaly.
+air-instant-16,journal-v2,evaluation,air,instant,B,smoke concentration,95,ppm,SHUTDOWN,,,
+air-history-16,journal-v2,evaluation,air,history,B,smoke concentration,95,ppm,SHUTDOWN,87|91|95,,
+air-log-16,journal-v2,evaluation,air,log,B,smoke concentration,95,ppm,SHUTDOWN,,alert,Shift report: intermittent haze observed; two sensors flag a corroborated anomaly.
+air-instant-17,journal-v2,calibration,air,instant,A,smoke concentration,9,ppm,NORMAL,,,
+air-history-17,journal-v2,calibration,air,history,A,smoke concentration,9,ppm,MONITOR,0|0|9,,
+air-log-17,journal-v2,calibration,air,log,A,smoke concentration,9,ppm,NORMAL,,benign,Operator report: area is clear; gateway log says diagnostic exercise only.
+air-instant-18,journal-v2,evaluation,air,instant,A,smoke concentration,10,ppm,NORMAL,,,
+air-history-18,journal-v2,evaluation,air,history,A,smoke concentration,10,ppm,MONITOR,0|0|10,,
+air-log-18,journal-v2,evaluation,air,log,A,smoke concentration,10,ppm,NORMAL,,benign,Operator report: area is clear; gateway log says diagnostic exercise only.
+air-instant-19,journal-v2,calibration,air,instant,B,smoke concentration,100,ppm,SHUTDOWN,,,
+air-history-19,journal-v2,calibration,air,history,B,smoke concentration,100,ppm,SHUTDOWN,78|88|100,,
+air-log-19,journal-v2,calibration,air,log,B,smoke concentration,100,ppm,SHUTDOWN,,critical,Shift report: visible smoke confirmed at the enclosure; gateway log reports CRITICAL combustion signature.
+air-instant-20,journal-v2,evaluation,air,instant,B,smoke concentration,90,ppm,SHUTDOWN,,,
+air-history-20,journal-v2,evaluation,air,history,B,smoke concentration,90,ppm,SHUTDOWN,67|77|90,,
+air-log-20,journal-v2,evaluation,air,log,B,smoke concentration,90,ppm,SHUTDOWN,,critical,Shift report: visible smoke confirmed at the enclosure; gateway log reports CRITICAL combustion signature.
+vibration-instant-01,journal-v2,calibration,vibration,instant,A,motor vibration,2.3,mm/s RMS,NORMAL,,,
+vibration-history-01,journal-v2,calibration,vibration,history,A,motor vibration,2.3,mm/s RMS,MONITOR,0|0.9|2.3,,
+vibration-log-01,journal-v2,calibration,vibration,log,A,motor vibration,2.3,mm/s RMS,SHUTDOWN,,critical,Maintenance chat: sparking is visible; protection relay reports CRITICAL arc evidence.
+vibration-instant-02,journal-v2,evaluation,vibration,instant,A,motor vibration,3.6,mm/s RMS,NORMAL,,,
+vibration-history-02,journal-v2,evaluation,vibration,history,A,motor vibration,3.6,mm/s RMS,MONITOR,0.8|2.1|3.6,,
+vibration-log-02,journal-v2,evaluation,vibration,log,A,motor vibration,3.6,mm/s RMS,SHUTDOWN,,critical,Maintenance chat: sparking is visible; protection relay reports CRITICAL arc evidence.
+vibration-instant-03,journal-v2,calibration,vibration,instant,B,motor vibration,3,mm/s RMS,NORMAL,,,
+vibration-history-03,journal-v2,calibration,vibration,history,B,motor vibration,3,mm/s RMS,NORMAL,1.9|2.4|3,,
+vibration-log-03,journal-v2,calibration,vibration,log,B,motor vibration,3,mm/s RMS,MONITOR,,alert,Maintenance chat: repeated metallic noise; diagnostic log marks corroborated anomaly.
+vibration-instant-04,journal-v2,evaluation,vibration,instant,B,motor vibration,4,mm/s RMS,NORMAL,,,
+vibration-history-04,journal-v2,evaluation,vibration,history,B,motor vibration,4,mm/s RMS,NORMAL,2.9|3.4|4,,
+vibration-log-04,journal-v2,evaluation,vibration,log,B,motor vibration,4,mm/s RMS,MONITOR,,alert,Maintenance chat: repeated metallic noise; diagnostic log marks corroborated anomaly.
+vibration-instant-05,journal-v2,calibration,vibration,instant,A,motor vibration,5.2,mm/s RMS,MONITOR,,,
+vibration-history-05,journal-v2,calibration,vibration,history,A,motor vibration,5.2,mm/s RMS,ALERT,2.6|3.8|5.2,,
+vibration-log-05,journal-v2,calibration,vibration,log,A,motor vibration,5.2,mm/s RMS,MONITOR,,benign,Maintenance entry: sensor mount checked; no corroborating hazard was found.
+vibration-instant-06,journal-v2,evaluation,vibration,instant,A,motor vibration,6.5,mm/s RMS,MONITOR,,,
+vibration-history-06,journal-v2,evaluation,vibration,history,A,motor vibration,6.5,mm/s RMS,ALERT,3.7|5|6.5,,
+vibration-log-06,journal-v2,evaluation,vibration,log,A,motor vibration,6.5,mm/s RMS,MONITOR,,benign,Maintenance entry: sensor mount checked; no corroborating hazard was found.
+vibration-instant-07,journal-v2,calibration,vibration,instant,B,motor vibration,6.8,mm/s RMS,MONITOR,,,
+vibration-history-07,journal-v2,calibration,vibration,history,B,motor vibration,6.8,mm/s RMS,ALERT,3.8|5.2|6.8,,
+vibration-log-07,journal-v2,calibration,vibration,log,B,motor vibration,6.8,mm/s RMS,SHUTDOWN,,critical,Maintenance chat: sparking is visible; protection relay reports CRITICAL arc evidence.
+vibration-instant-08,journal-v2,evaluation,vibration,instant,B,motor vibration,5.8,mm/s RMS,MONITOR,,,
+vibration-history-08,journal-v2,evaluation,vibration,history,B,motor vibration,5.8,mm/s RMS,ALERT,2.6|4.1|5.8,,
+vibration-log-08,journal-v2,evaluation,vibration,log,B,motor vibration,5.8,mm/s RMS,SHUTDOWN,,critical,Maintenance chat: sparking is visible; protection relay reports CRITICAL arc evidence.
+vibration-instant-09,journal-v2,calibration,vibration,instant,A,motor vibration,8.1,mm/s RMS,ALERT,,,
+vibration-history-09,journal-v2,calibration,vibration,history,A,motor vibration,8.1,mm/s RMS,ALERT,7|7.5|8.1,,
+vibration-log-09,journal-v2,calibration,vibration,log,A,motor vibration,8.1,mm/s RMS,SHUTDOWN,,alert,Maintenance chat: repeated metallic noise; diagnostic log marks corroborated anomaly.
+vibration-instant-10,journal-v2,evaluation,vibration,instant,A,motor vibration,9.4,mm/s RMS,ALERT,,,
+vibration-history-10,journal-v2,evaluation,vibration,history,A,motor vibration,9.4,mm/s RMS,ALERT,8.3|8.8|9.4,,
+vibration-log-10,journal-v2,evaluation,vibration,log,A,motor vibration,9.4,mm/s RMS,SHUTDOWN,,alert,Maintenance chat: repeated metallic noise; diagnostic log marks corroborated anomaly.
+vibration-instant-11,journal-v2,calibration,vibration,instant,B,motor vibration,10,mm/s RMS,ALERT,,,
+vibration-history-11,journal-v2,calibration,vibration,history,B,motor vibration,10,mm/s RMS,SHUTDOWN,7|8.4|10,,
+vibration-log-11,journal-v2,calibration,vibration,log,B,motor vibration,10,mm/s RMS,ALERT,,benign,Maintenance entry: sensor mount checked; no corroborating hazard was found.
+vibration-instant-12,journal-v2,evaluation,vibration,instant,B,motor vibration,10.6,mm/s RMS,ALERT,,,
+vibration-history-12,journal-v2,evaluation,vibration,history,B,motor vibration,10.6,mm/s RMS,SHUTDOWN,7.4|8.9|10.6,,
+vibration-log-12,journal-v2,evaluation,vibration,log,B,motor vibration,10.6,mm/s RMS,ALERT,,benign,Maintenance entry: sensor mount checked; no corroborating hazard was found.
+vibration-instant-13,journal-v2,calibration,vibration,instant,A,motor vibration,12.1,mm/s RMS,SHUTDOWN,,,
+vibration-history-13,journal-v2,calibration,vibration,history,A,motor vibration,12.1,mm/s RMS,SHUTDOWN,9.5|10.7|12.1,,
+vibration-log-13,journal-v2,calibration,vibration,log,A,motor vibration,12.1,mm/s RMS,SHUTDOWN,,critical,Maintenance chat: sparking is visible; protection relay reports CRITICAL arc evidence.
+vibration-instant-14,journal-v2,evaluation,vibration,instant,A,motor vibration,15,mm/s RMS,SHUTDOWN,,,
+vibration-history-14,journal-v2,evaluation,vibration,history,A,motor vibration,15,mm/s RMS,SHUTDOWN,12.2|13.5|15,,
+vibration-log-14,journal-v2,evaluation,vibration,log,A,motor vibration,15,mm/s RMS,SHUTDOWN,,critical,Maintenance chat: sparking is visible; protection relay reports CRITICAL arc evidence.
+vibration-instant-15,journal-v2,calibration,vibration,instant,B,motor vibration,20,mm/s RMS,SHUTDOWN,,,
+vibration-history-15,journal-v2,calibration,vibration,history,B,motor vibration,20,mm/s RMS,SHUTDOWN,18.9|19.4|20,,
+vibration-log-15,journal-v2,calibration,vibration,log,B,motor vibration,20,mm/s RMS,SHUTDOWN,,alert,Maintenance chat: repeated metallic noise; diagnostic log marks corroborated anomaly.
+vibration-instant-16,journal-v2,evaluation,vibration,instant,B,motor vibration,27,mm/s RMS,SHUTDOWN,,,
+vibration-history-16,journal-v2,evaluation,vibration,history,B,motor vibration,27,mm/s RMS,SHUTDOWN,25.9|26.4|27,,
+vibration-log-16,journal-v2,evaluation,vibration,log,B,motor vibration,27,mm/s RMS,SHUTDOWN,,alert,Maintenance chat: repeated metallic noise; diagnostic log marks corroborated anomaly.
+vibration-instant-17,journal-v2,calibration,vibration,instant,A,motor vibration,3,mm/s RMS,NORMAL,,,
+vibration-history-17,journal-v2,calibration,vibration,history,A,motor vibration,3,mm/s RMS,MONITOR,0.4|1.6|3,,
+vibration-log-17,journal-v2,calibration,vibration,log,A,motor vibration,3,mm/s RMS,NORMAL,,benign,Maintenance entry: sensor mount checked; no corroborating hazard was found.
+vibration-instant-18,journal-v2,evaluation,vibration,instant,A,motor vibration,0,mm/s RMS,NORMAL,,,
+vibration-history-18,journal-v2,evaluation,vibration,history,A,motor vibration,0,mm/s RMS,MONITOR,0|0|0,,
+vibration-log-18,journal-v2,evaluation,vibration,log,A,motor vibration,0,mm/s RMS,NORMAL,,benign,Maintenance entry: sensor mount checked; no corroborating hazard was found.
+vibration-instant-19,journal-v2,calibration,vibration,instant,B,motor vibration,32,mm/s RMS,SHUTDOWN,,,
+vibration-history-19,journal-v2,calibration,vibration,history,B,motor vibration,32,mm/s RMS,SHUTDOWN,29|30.4|32,,
+vibration-log-19,journal-v2,calibration,vibration,log,B,motor vibration,32,mm/s RMS,SHUTDOWN,,critical,Maintenance chat: sparking is visible; protection relay reports CRITICAL arc evidence.
+vibration-instant-20,journal-v2,evaluation,vibration,instant,B,motor vibration,22,mm/s RMS,SHUTDOWN,,,
+vibration-history-20,journal-v2,evaluation,vibration,history,B,motor vibration,22,mm/s RMS,SHUTDOWN,18.8|20.3|22,,
+vibration-log-20,journal-v2,evaluation,vibration,log,B,motor vibration,22,mm/s RMS,SHUTDOWN,,critical,Maintenance chat: sparking is visible; protection relay reports CRITICAL arc evidence.
+power-instant-01,journal-v2,calibration,power,instant,A,line current,27,amperes,NORMAL,,,
+power-history-01,journal-v2,calibration,power,history,A,line current,27,amperes,MONITOR,8|17|27,,
+power-log-01,journal-v2,calibration,power,log,A,line current,27,amperes,SHUTDOWN,,critical,Operator free text: bearing appears seized; controller emits CRITICAL mechanical lock code.
+power-instant-02,journal-v2,evaluation,power,instant,A,line current,43,amperes,NORMAL,,,
+power-history-02,journal-v2,evaluation,power,history,A,line current,43,amperes,MONITOR,23|32|43,,
+power-log-02,journal-v2,evaluation,power,log,A,line current,43,amperes,SHUTDOWN,,critical,Operator free text: bearing appears seized; controller emits CRITICAL mechanical lock code.
+power-instant-03,journal-v2,calibration,power,instant,B,line current,58,amperes,NORMAL,,,
+power-history-03,journal-v2,calibration,power,history,B,line current,58,amperes,NORMAL,50|54|58,,
+power-log-03,journal-v2,calibration,power,log,B,line current,58,amperes,MONITOR,,alert,Operator free text: cable discoloration observed; relay log marks corroborated anomaly.
+power-instant-04,journal-v2,evaluation,power,instant,B,line current,59,amperes,NORMAL,,,
+power-history-04,journal-v2,evaluation,power,history,B,line current,59,amperes,NORMAL,51|55|59,,
+power-log-04,journal-v2,evaluation,power,log,B,line current,59,amperes,MONITOR,,alert,Operator free text: cable discoloration observed; relay log marks corroborated anomaly.
+power-instant-05,journal-v2,calibration,power,instant,A,line current,60,amperes,MONITOR,,,
+power-history-05,journal-v2,calibration,power,history,A,line current,60,amperes,ALERT,41|50|60,,
+power-log-05,journal-v2,calibration,power,log,A,line current,60,amperes,MONITOR,,benign,Shift note: inspection normal; transient code cleared after self-test.
+power-instant-06,journal-v2,evaluation,power,instant,A,line current,70,amperes,MONITOR,,,
+power-history-06,journal-v2,evaluation,power,history,A,line current,70,amperes,ALERT,50|59|70,,
+power-log-06,journal-v2,evaluation,power,log,A,line current,70,amperes,MONITOR,,benign,Shift note: inspection normal; transient code cleared after self-test.
+power-instant-07,journal-v2,calibration,power,instant,B,line current,79,amperes,MONITOR,,,
+power-history-07,journal-v2,calibration,power,history,B,line current,79,amperes,ALERT,57|67|79,,
+power-log-07,journal-v2,calibration,power,log,B,line current,79,amperes,SHUTDOWN,,critical,Operator free text: bearing appears seized; controller emits CRITICAL mechanical lock code.
+power-instant-08,journal-v2,evaluation,power,instant,B,line current,65,amperes,MONITOR,,,
+power-history-08,journal-v2,evaluation,power,history,B,line current,65,amperes,ALERT,42|52|65,,
+power-log-08,journal-v2,evaluation,power,log,B,line current,65,amperes,SHUTDOWN,,critical,Operator free text: bearing appears seized; controller emits CRITICAL mechanical lock code.
+power-instant-09,journal-v2,calibration,power,instant,A,line current,80,amperes,ALERT,,,
+power-history-09,journal-v2,calibration,power,history,A,line current,80,amperes,ALERT,72|76|80,,
+power-log-09,journal-v2,calibration,power,log,A,line current,80,amperes,SHUTDOWN,,alert,Operator free text: cable discoloration observed; relay log marks corroborated anomaly.
+power-instant-10,journal-v2,evaluation,power,instant,A,line current,87,amperes,ALERT,,,
+power-history-10,journal-v2,evaluation,power,history,A,line current,87,amperes,ALERT,79|83|87,,
+power-log-10,journal-v2,evaluation,power,log,A,line current,87,amperes,SHUTDOWN,,alert,Operator free text: cable discoloration observed; relay log marks corroborated anomaly.
+power-instant-11,journal-v2,calibration,power,instant,B,line current,98,amperes,ALERT,,,
+power-history-11,journal-v2,calibration,power,history,B,line current,98,amperes,SHUTDOWN,76|86|98,,
+power-log-11,journal-v2,calibration,power,log,B,line current,98,amperes,ALERT,,benign,Shift note: inspection normal; transient code cleared after self-test.
+power-instant-12,journal-v2,evaluation,power,instant,B,line current,93,amperes,ALERT,,,
+power-history-12,journal-v2,evaluation,power,history,B,line current,93,amperes,SHUTDOWN,70|80|93,,
+power-log-12,journal-v2,evaluation,power,log,B,line current,93,amperes,ALERT,,benign,Shift note: inspection normal; transient code cleared after self-test.
+power-instant-13,journal-v2,calibration,power,instant,A,line current,100,amperes,SHUTDOWN,,,
+power-history-13,journal-v2,calibration,power,history,A,line current,100,amperes,SHUTDOWN,81|90|100,,
+power-log-13,journal-v2,calibration,power,log,A,line current,100,amperes,SHUTDOWN,,critical,Operator free text: bearing appears seized; controller emits CRITICAL mechanical lock code.
+power-instant-14,journal-v2,evaluation,power,instant,A,line current,103,amperes,SHUTDOWN,,,
+power-history-14,journal-v2,evaluation,power,history,A,line current,103,amperes,SHUTDOWN,83|92|103,,
+power-log-14,journal-v2,evaluation,power,log,A,line current,103,amperes,SHUTDOWN,,critical,Operator free text: bearing appears seized; controller emits CRITICAL mechanical lock code.
+power-instant-15,journal-v2,calibration,power,instant,B,line current,108,amperes,SHUTDOWN,,,
+power-history-15,journal-v2,calibration,power,history,B,line current,108,amperes,SHUTDOWN,100|104|108,,
+power-log-15,journal-v2,calibration,power,log,B,line current,108,amperes,SHUTDOWN,,alert,Operator free text: cable discoloration observed; relay log marks corroborated anomaly.
+power-instant-16,journal-v2,evaluation,power,instant,B,line current,115,amperes,SHUTDOWN,,,
+power-history-16,journal-v2,evaluation,power,history,B,line current,115,amperes,SHUTDOWN,107|111|115,,
+power-log-16,journal-v2,evaluation,power,log,B,line current,115,amperes,SHUTDOWN,,alert,Operator free text: cable discoloration observed; relay log marks corroborated anomaly.
+power-instant-17,journal-v2,calibration,power,instant,A,line current,36,amperes,NORMAL,,,
+power-history-17,journal-v2,calibration,power,history,A,line current,36,amperes,MONITOR,17|26|36,,
+power-log-17,journal-v2,calibration,power,log,A,line current,36,amperes,NORMAL,,benign,Shift note: inspection normal; transient code cleared after self-test.
+power-instant-18,journal-v2,evaluation,power,instant,A,line current,55,amperes,NORMAL,,,
+power-history-18,journal-v2,evaluation,power,history,A,line current,55,amperes,MONITOR,35|44|55,,
+power-log-18,journal-v2,evaluation,power,log,A,line current,55,amperes,NORMAL,,benign,Shift note: inspection normal; transient code cleared after self-test.
+power-instant-19,journal-v2,calibration,power,instant,B,line current,120,amperes,SHUTDOWN,,,
+power-history-19,journal-v2,calibration,power,history,B,line current,120,amperes,SHUTDOWN,98|108|120,,
+power-log-19,journal-v2,calibration,power,log,B,line current,120,amperes,SHUTDOWN,,critical,Operator free text: bearing appears seized; controller emits CRITICAL mechanical lock code.
+power-instant-20,journal-v2,evaluation,power,instant,B,line current,110,amperes,SHUTDOWN,,,
+power-history-20,journal-v2,evaluation,power,history,B,line current,110,amperes,SHUTDOWN,87|97|110,,
+power-log-20,journal-v2,evaluation,power,log,B,line current,110,amperes,SHUTDOWN,,critical,Operator free text: bearing appears seized; controller emits CRITICAL mechanical lock code.

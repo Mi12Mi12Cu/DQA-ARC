@@ -1,0 +1,121 @@
+{
+  "metadata": {
+    "startedAt": "2026-11-10T22:49:18.241Z",
+    "finishedAt": "2026-11-10T22:51:20.840Z",
+    "mosquittoVersion": "2.1.2",
+    "ollamaVersion": "0.40.14",
+    "model": "qwen2.5:3b",
+    "brokerPid": 47140,
+    "profileFile": "C:\\Users\\MCSL\\Desktop\\Miracle PhD folder\\Codes\\Adaptive Retention Control for MQTT Broker\\results\\profiles\\profile_both_calibration_20261109T031430Z.jsonl",
+    "config": {
+      "policy": "occupancy-threshold",
+      "allocator": "quality-aware",
+      "traffic": "poisson",
+      "durationSeconds": 120,
+      "meanRate": 4,
+      "capacity": 8,
+      "alpha": 0.05,
+      "fixedDeadline": 8,
+      "minDeadline": 0.25,
+      "maxDeadline": 8,
+      "epochSeconds": 4,
+      "cpuFraction": 0.2,
+      "seed": 606,
+      "model": "qwen2.5:3b",
+      "driftModel": "",
+      "driftAtSeconds": 60,
+      "controllerGain": 1.5,
+      "messagingReserveSeconds": 0.05,
+      "campaign": "journal-standard-main",
+      "sampleGpuEnergy": false,
+      "profileFile": "results/profiles/profile_both_calibration_20261109T031430Z.jsonl",
+      "brokerPort": 18884,
+      "mosquittoPath": "C:\\Program Files\\mosquitto\\mosquitto.exe",
+      "occupancyThreshold": 6,
+      "reservedCpuSlots": 2
+    },
+    "offeredLoadTarget": 4.542959407058387,
+    "generatedArrivals": 500,
+    "realizedMeanRate": 4.166666666666667,
+    "oneSecondCountDispersion": {
+      "mean": 4.166666666666667,
+      "variance": 3.7366946778711476,
+      "index": 0.8968067226890754
+    },
+    "trafficStateCoverage": {
+      "type": "poisson",
+      "transitions": 0,
+      "lowStateSeconds": null,
+      "highStateSeconds": null,
+      "visitedLow": null,
+      "visitedHigh": null
+    }
+  },
+  "counts": {
+    "published": 500,
+    "admitted": 399,
+    "blocked": 101,
+    "expired": 4,
+    "completed": 395,
+    "completedOnTime": 395,
+    "correctOnTime": 290,
+    "correctOnTimeGpu": 234,
+    "correctOnTimeCpu": 56,
+    "late": 4,
+    "rerouted": 0,
+    "errors": 0
+  },
+  "classCounts": {
+    "gpu": {
+      "published": 381,
+      "admitted": 308,
+      "blocked": 73,
+      "expired": 0,
+      "completedOnTime": 308,
+      "correctOnTime": 234,
+      "late": 0
+    },
+    "cpu": {
+      "published": 119,
+      "admitted": 91,
+      "blocked": 28,
+      "expired": 4,
+      "completedOnTime": 87,
+      "correctOnTime": 56,
+      "late": 4
+    }
+  },
+  "metrics": {
+    "applicationBlocking": 0.202,
+    "expiryAmongAdmitted": 0.010025062656641603,
+    "onTimeCompletionAmongAdmitted": 0.9899749373433584,
+    "qualityAdjustedGoodput": 2.4166666666666665,
+    "onTimeAccuracy": 0.7341772151898734,
+    "protocolAckMeanMs": 1.1056920000002128,
+    "protocolAckP95Ms": 1.6114749999995168,
+    "maxOccupancy": 6,
+    "meanOccupancy": 3.6363636363636362,
+    "brokerPeakRssMiB": 0,
+    "nodePeakRssMiB": 80.97265625,
+    "idleGpuPowerWatts": null,
+    "gpuBoardEnergyJoules": 0,
+    "gpuDynamicEnergyJoules": 0,
+    "gpuDynamicJoulesPerCorrectGpuResult": 0,
+    "byPreferredClass": {
+      "gpu": {
+        "applicationBlocking": 0.19160104986876642,
+        "expiryAmongAdmitted": 0,
+        "onTimeCompletionAmongAdmitted": 1,
+        "onTimeAccuracy": 0.7597402597402597,
+        "qualityAdjustedGoodput": 1.95
+      },
+      "cpu": {
+        "applicationBlocking": 0.23529411764705882,
+        "expiryAmongAdmitted": 0.04395604395604396,
+        "onTimeCompletionAmongAdmitted": 0.9560439560439561,
+        "onTimeAccuracy": 0.6436781609195402,
+        "qualityAdjustedGoodput": 0.4666666666666667
+      }
+    }
+  }
+}

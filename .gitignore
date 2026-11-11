@@ -1,0 +1,11 @@
+node_modules/
+npm-debug.log*
+experiments/tmp/
+paper/preview/
+paper/*.aux
+paper/*.blg
+paper/*.log
+paper/*.out
+paper/*.synctex.gz
+.DS_Store
+Thumbs.db

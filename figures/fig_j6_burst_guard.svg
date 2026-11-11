@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="470" viewBox="0 0 920 470">
+<rect width="100%" height="100%" fill="white"/>
+<style>text{font-family:Arial,sans-serif;fill:#222}.axis{stroke:#222;stroke-width:1.5}.grid{stroke:#ddd;stroke-width:1}.label{font-size:15px}.tick{font-size:13px}.legend{font-size:13px}.ci{stroke:#222;stroke-width:1.4}</style>
+<line x1="75" y1="400" x2="885" y2="400" class="grid"/><text x="66" y="405" text-anchor="end" class="tick">0%</text>
+<line x1="75" y1="327" x2="885" y2="327" class="grid"/><text x="66" y="332" text-anchor="end" class="tick">12%</text>
+<line x1="75" y1="254" x2="885" y2="254" class="grid"/><text x="66" y="259" text-anchor="end" class="tick">24%</text>
+<line x1="75" y1="181" x2="885" y2="181" class="grid"/><text x="66" y="186" text-anchor="end" class="tick">36%</text>
+<line x1="75" y1="107.99999999999999" x2="885" y2="107.99999999999999" class="grid"/><text x="66" y="112.99999999999999" text-anchor="end" class="tick">48%</text>
+<line x1="75" y1="35" x2="885" y2="35" class="grid"/><text x="66" y="40" text-anchor="end" class="tick">60%</text>
+<line x1="75" y1="35" x2="75" y2="400" class="axis"/><line x1="75" y1="400" x2="885" y2="400" class="axis"/>
+<text transform="translate(18 217.5) rotate(-90)" text-anchor="middle" class="label">Probability</text>
+<text x="480" y="455" text-anchor="middle" class="label">Application-state capacity (records)</text>
+<text x="75" y="423" text-anchor="middle" class="tick">4</text>
+<text x="480" y="423" text-anchor="middle" class="tick">8</text>
+<text x="885" y="423" text-anchor="middle" class="tick">12</text>
+<polyline points="75,206.13409726310388 480,293.30163843633215 885,343.03745404305545" fill="none" stroke="#009E73" stroke-width="3" stroke-dasharray=""/>
+<line x1="75" y1="202.7519987529028" x2="75" y2="209.516195773305" class="ci"/><line x1="70" y1="202.7519987529028" x2="80" y2="202.7519987529028" class="ci"/><line x1="70" y1="209.516195773305" x2="80" y2="209.516195773305" class="ci"/><circle cx="75" cy="206.13409726310388" r="5" fill="#009E73"/>
+<line x1="480" y1="290.3213528002892" x2="480" y2="296.2819240723751" class="ci"/><line x1="475" y1="290.3213528002892" x2="485" y2="290.3213528002892" class="ci"/><line x1="475" y1="296.2819240723751" x2="485" y2="296.2819240723751" class="ci"/><circle cx="480" cy="293.30163843633215" r="5" fill="#009E73"/>
+<line x1="885" y1="340.2944414370966" x2="885" y2="345.7804666490143" class="ci"/><line x1="880" y1="340.2944414370966" x2="890" y2="340.2944414370966" class="ci"/><line x1="880" y1="345.7804666490143" x2="890" y2="345.7804666490143" class="ci"/><circle cx="885" cy="343.03745404305545" r="5" fill="#009E73"/>
+<line x1="530" y1="12" x2="557" y2="12" stroke="#009E73" stroke-width="3" stroke-dasharray=""/><text x="565" y="17" class="legend">Guarded broker blocking</text>
+<polyline points="75,394.0859230436088 480,399.96660737802847 885,400" fill="none" stroke="#56B4E9" stroke-width="3" stroke-dasharray=""/>
+<line x1="75" y1="393.3843881647028" x2="75" y2="394.78745792251476" class="ci"/><line x1="70" y1="393.3843881647028" x2="80" y2="393.3843881647028" class="ci"/><line x1="70" y1="394.78745792251476" x2="80" y2="394.78745792251476" class="ci"/><circle cx="75" cy="394.0859230436088" r="5" fill="#56B4E9"/>
+<line x1="480" y1="399.90821099697644" x2="480" y2="400" class="ci"/><line x1="475" y1="399.90821099697644" x2="485" y2="399.90821099697644" class="ci"/><line x1="475" y1="400" x2="485" y2="400" class="ci"/><circle cx="480" cy="399.96660737802847" r="5" fill="#56B4E9"/>
+<line x1="885" y1="400" x2="885" y2="400" class="ci"/><line x1="880" y1="400" x2="890" y2="400" class="ci"/><line x1="880" y1="400" x2="890" y2="400" class="ci"/><circle cx="885" cy="400" r="5" fill="#56B4E9"/>
+<line x1="530" y1="32" x2="557" y2="32" stroke="#56B4E9" stroke-width="3" stroke-dasharray=""/><text x="565" y="37" class="legend">Token bucket broker blocking</text>
+<polyline points="75,184.62609005895249 480,187.937531184213 885,188.8014686979315" fill="none" stroke="#D55E00" stroke-width="3" stroke-dasharray="8 5"/>
+<line x1="75" y1="180.03819289490966" x2="75" y2="189.2139872229953" class="ci"/><line x1="70" y1="180.03819289490966" x2="80" y2="180.03819289490966" class="ci"/><line x1="70" y1="189.2139872229953" x2="80" y2="189.2139872229953" class="ci"/><circle cx="75" cy="184.62609005895249" r="5" fill="#D55E00"/>
+<line x1="480" y1="184.0071728315741" x2="480" y2="191.86788953685195" class="ci"/><line x1="475" y1="184.0071728315741" x2="485" y2="184.0071728315741" class="ci"/><line x1="475" y1="191.86788953685195" x2="485" y2="191.86788953685195" class="ci"/><circle cx="480" cy="187.937531184213" r="5" fill="#D55E00"/>
+<line x1="885" y1="183.51630229359793" x2="885" y2="194.0866351022651" class="ci"/><line x1="880" y1="183.51630229359793" x2="890" y2="183.51630229359793" class="ci"/><line x1="880" y1="194.0866351022651" x2="890" y2="194.0866351022651" class="ci"/><circle cx="885" cy="188.8014686979315" r="5" fill="#D55E00"/>
+<line x1="530" y1="52" x2="557" y2="52" stroke="#D55E00" stroke-width="3" stroke-dasharray="8 5"/><text x="565" y="57" class="legend">Token bucket total admission loss</text></svg>

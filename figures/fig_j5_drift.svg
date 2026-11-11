@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="470" viewBox="0 0 920 470">
+<rect width="100%" height="100%" fill="white"/>
+<style>text{font-family:Arial,sans-serif;fill:#222}.axis{stroke:#222;stroke-width:1.5}.grid{stroke:#ddd;stroke-width:1}.label{font-size:15px}.tick{font-size:13px}.legend{font-size:13px}.ci{stroke:#222;stroke-width:1.4}</style>
+<line x1="55" y1="362" x2="415" y2="362" class="grid"/><text x="48" y="367" text-anchor="end" class="tick">0%</text>
+<line x1="55" y1="282" x2="415" y2="282" class="grid"/><text x="48" y="287" text-anchor="end" class="tick">15%</text>
+<line x1="55" y1="202" x2="415" y2="202" class="grid"/><text x="48" y="207" text-anchor="end" class="tick">30%</text>
+<line x1="55" y1="122" x2="415" y2="122" class="grid"/><text x="48" y="127" text-anchor="end" class="tick">45%</text>
+<line x1="55" y1="42" x2="415" y2="42" class="grid"/><text x="48" y="47" text-anchor="end" class="tick">60%</text>
+<line x1="55" y1="42" x2="55" y2="362" class="axis"/><line x1="55" y1="362" x2="415" y2="362" class="axis"/><text x="235" y="454" text-anchor="middle" class="label">Expiry among admitted</text>
+<rect x="122" y="267.99734341484475" width="46" height="94.00265658515525" fill="#555555"/><line x1="145" y1="253.39329461351758" x2="145" y2="282.601392216172" class="ci"/><line x1="139" y1="253.39329461351758" x2="151" y2="253.39329461351758" class="ci"/><line x1="139" y1="282.601392216172" x2="151" y2="282.601392216172" class="ci"/><text x="145" y="384" text-anchor="middle" class="tick">Fixed</text>
+<rect x="302" y="285.6514357592923" width="46" height="76.34856424070767" fill="#009E73"/><line x1="325" y1="269.37330777454395" x2="325" y2="301.9295637440407" class="ci"/><line x1="319" y1="269.37330777454395" x2="331" y2="269.37330777454395" class="ci"/><line x1="319" y1="301.9295637440407" x2="331" y2="301.9295637440407" class="ci"/><text x="325" y="384" text-anchor="middle" class="tick">DQA</text>
+<line x1="500" y1="362" x2="860" y2="362" class="grid"/><text x="493" y="367" text-anchor="end" class="tick">0.0</text>
+<line x1="500" y1="282" x2="860" y2="282" class="grid"/><text x="493" y="287" text-anchor="end" class="tick">1.1</text>
+<line x1="500" y1="202" x2="860" y2="202" class="grid"/><text x="493" y="207" text-anchor="end" class="tick">2.3</text>
+<line x1="500" y1="122" x2="860" y2="122" class="grid"/><text x="493" y="127" text-anchor="end" class="tick">3.4</text>
+<line x1="500" y1="42" x2="860" y2="42" class="grid"/><text x="493" y="47" text-anchor="end" class="tick">4.5</text>
+<line x1="500" y1="42" x2="500" y2="362" class="axis"/><line x1="500" y1="362" x2="860" y2="362" class="axis"/><text x="680" y="454" text-anchor="middle" class="label">Correct on-time results/s</text>
+<rect x="567" y="247.86666666666667" width="46" height="114.13333333333333" fill="#555555"/><line x1="590" y1="239.63702185494617" x2="590" y2="256.0963114783872" class="ci"/><line x1="584" y1="239.63702185494617" x2="596" y2="239.63702185494617" class="ci"/><line x1="584" y1="256.0963114783872" x2="596" y2="256.0963114783872" class="ci"/><text x="590" y="384" text-anchor="middle" class="tick">Fixed</text>
+<rect x="747" y="225.34814814814814" width="46" height="136.65185185185186" fill="#009E73"/><line x1="770" y1="220.2294363815437" x2="770" y2="230.46685991475258" class="ci"/><line x1="764" y1="220.2294363815437" x2="776" y2="220.2294363815437" class="ci"/><line x1="764" y1="230.46685991475258" x2="776" y2="230.46685991475258" class="ci"/><text x="770" y="384" text-anchor="middle" class="tick">DQA</text></svg>
