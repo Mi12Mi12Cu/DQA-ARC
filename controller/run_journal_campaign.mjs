@@ -12,7 +12,7 @@ function arg(name, fallback) {
 const phase = arg('phase', 'main');
 const mainSeeds = '601,602,603,604,605,606,607,608,609,610';
 const auxiliarySeeds = '701,702,703,704,705,706,707,708,709,710';
-const seeds = arg('seeds', ['main', 'standard-main'].includes(phase) ? mainSeeds : auxiliarySeeds).split(',').map(Number);
+const seeds = arg('seeds', ['main', 'standard-main', 'theta-main', 'fifo-main'].includes(phase) ? mainSeeds : auxiliarySeeds).split(',').map(Number);
 const profile = arg('profile', '');
 const duration = Number(arg('duration', '120'));
 const fixedForDrift = Number(arg('best-fixed-deadline', '3'));
@@ -33,9 +33,12 @@ const existing = walk(path.join('experiments', 'live_runs'), 'summary.json').fla
 });
 
 function matches(job) {
-  return existing.some(({ data }) => {
+  return existing.some(({ file, data }) => {
     const c = data.metadata?.config;
-    return c && c.campaign === job.campaign && c.seed === job.seed && c.policy === job.policy &&
+    const runDir = path.dirname(file);
+    const complete = Number(data.counts?.errors ?? 0) === 0 &&
+      ['events.jsonl', 'epochs.csv', 'resources.csv', 'broker-log.json'].every((name) => fs.existsSync(path.join(runDir, name)));
+    return complete && c && c.campaign === job.campaign && c.seed === job.seed && c.policy === job.policy &&
       c.allocator === job.allocator && c.traffic === job.traffic && c.durationSeconds === duration &&
       c.fixedDeadline === job.fixedDeadline && (c.driftModel || '') === (job.driftModel || '') &&
       (job.occupancyThreshold == null || c.occupancyThreshold === job.occupancyThreshold) &&
@@ -93,6 +96,34 @@ function buildJobs() {
         fixedDeadline: 8, driftModel: 'qwen2.5:7b', occupancyThreshold: 6, reservedCpuSlots: 2
       });
     }
+  } else if (phase === 'theta-main') {
+    const thresholds = [4, 5, 6, 7];
+    for (const traffic of ['poisson', 'mmpp']) for (const [seedIndex, seed] of seeds.entries()) {
+      const balancedThresholds = thresholds.map((_, offset) => thresholds[(seedIndex + offset) % thresholds.length]);
+      for (const occupancyThreshold of balancedThresholds) jobs.push({
+        campaign: 'journal-standard-main', traffic, policy: 'occupancy-threshold', allocator: 'quality-aware', seed,
+        fixedDeadline: 8, occupancyThreshold, reservedCpuSlots: 2
+      });
+    }
+  } else if (phase === 'theta-drift') {
+    const thresholds = [4, 5, 6, 7];
+    for (const [seedIndex, seed] of seeds.entries()) {
+      const balancedThresholds = thresholds.map((_, offset) => thresholds[(seedIndex + offset) % thresholds.length]);
+      for (const occupancyThreshold of balancedThresholds) jobs.push({
+        campaign: 'journal-standard-drift', traffic: 'rate-step', policy: 'occupancy-threshold', allocator: 'quality-aware', seed,
+        fixedDeadline: 8, driftModel: 'qwen2.5:7b', occupancyThreshold, reservedCpuSlots: 2
+      });
+    }
+  } else if (phase === 'fifo-main') {
+    for (const traffic of ['poisson', 'mmpp']) for (const seed of seeds) jobs.push({
+      campaign: 'journal-standard-main', traffic, policy: 'fifo', allocator: 'quality-aware', seed,
+      fixedDeadline: 8, occupancyThreshold: 8, reservedCpuSlots: 0
+    });
+  } else if (phase === 'fifo-drift') {
+    for (const seed of seeds) jobs.push({
+      campaign: 'journal-standard-drift', traffic: 'rate-step', policy: 'fifo', allocator: 'quality-aware', seed,
+      fixedDeadline: 8, driftModel: 'qwen2.5:7b', occupancyThreshold: 8, reservedCpuSlots: 0
+    });
   } else throw new Error(`Unknown phase: ${phase}`);
   return jobs;
 }
@@ -118,7 +149,7 @@ function run(job) {
 }
 
 const jobs = buildJobs();
-if (phase === 'main' || phase === 'standard-main') {
+if (['main', 'standard-main', 'theta-main', 'fifo-main'].includes(phase)) {
   for (const seed of seeds) {
     const coverage = generateArrivalScheduleDetailed({ type: 'mmpp', durationSeconds: duration, meanRate: 4, seed }).metadata;
     if (!(coverage.visitedLow && coverage.visitedHigh)) throw new Error(`MMPP seed ${seed} does not visit both states in ${duration} s.`);

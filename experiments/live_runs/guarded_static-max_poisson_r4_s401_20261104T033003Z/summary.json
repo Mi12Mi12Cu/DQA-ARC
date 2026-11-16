@@ -1,0 +1,63 @@
+{
+  "metadata": {
+    "startedAt": "2026-11-04T03:29:42.396Z",
+    "finishedAt": "2026-11-04T03:30:03.874Z",
+    "mosquittoVersion": "2.1.2",
+    "ollamaVersion": "0.40.14",
+    "model": "qwen2.5:7b",
+    "brokerPid": 34392,
+    "profileFile": "C:\\Users\\MCSL\\Desktop\\Miracle PhD folder\\Codes\\Adaptive Retention Control for MQTT Broker\\results\\profiles\\profile_both_calibration_20261104T025631Z.jsonl",
+    "config": {
+      "policy": "guarded",
+      "allocator": "static-max",
+      "traffic": "poisson",
+      "durationSeconds": 20,
+      "meanRate": 4,
+      "capacity": 8,
+      "alpha": 0.05,
+      "fixedDeadline": 3,
+      "minDeadline": 0.25,
+      "maxDeadline": 8,
+      "epochSeconds": 4,
+      "cpuFraction": 0.2,
+      "seed": 401,
+      "model": "qwen2.5:7b",
+      "profileFile": "",
+      "brokerPort": 18884,
+      "mosquittoPath": "C:\\Program Files\\mosquitto\\mosquitto.exe"
+    },
+    "offeredLoadTarget": 4.542959407058387,
+    "generatedArrivals": 83,
+    "realizedMeanRate": 4.15,
+    "oneSecondCountDispersion": {
+      "mean": 4.15,
+      "variance": 5.186842105263158,
+      "index": 1.2498414711477488
+    }
+  },
+  "counts": {
+    "published": 83,
+    "admitted": 77,
+    "blocked": 6,
+    "expired": 0,
+    "completed": 77,
+    "completedOnTime": 77,
+    "correctOnTime": 61,
+    "late": 0,
+    "rerouted": 10,
+    "errors": 0
+  },
+  "metrics": {
+    "applicationBlocking": 0.07228915662650602,
+    "expiryAmongAdmitted": 0,
+    "onTimeCompletionAmongAdmitted": 1,
+    "qualityAdjustedGoodput": 3.05,
+    "onTimeAccuracy": 0.7922077922077922,
+    "protocolAckMeanMs": 1.2554506024097214,
+    "protocolAckP95Ms": 2.5919800000003304,
+    "maxOccupancy": 8,
+    "meanOccupancy": 3.0952380952380953,
+    "brokerPeakRssMiB": 0,
+    "nodePeakRssMiB": 79.8515625
+  }
+}

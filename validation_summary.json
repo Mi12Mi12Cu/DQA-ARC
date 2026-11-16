@@ -1,0 +1,13 @@
+{
+  "previous_repository_run_directories": 310,
+  "update_run_directories": 212,
+  "new_selected_experiment_runs": 120,
+  "new_b1_threshold_runs": 90,
+  "new_fifo_runs": 30,
+  "design_stage_excluded_runs_supplied": 92,
+  "merged_executed_runs": 522,
+  "merged_selected_runs": 430,
+  "professor_experiment_cells": 15,
+  "professor_experiment_evidence_runs": 150,
+  "status": "validated"
+}

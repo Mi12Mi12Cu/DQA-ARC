@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="450" viewBox="0 0 1080 450">
+<rect width="100%" height="100%" fill="white"/>
+<style>text{font-family:Arial,sans-serif;fill:#222}.axis{stroke:#222;stroke-width:1.5}.grid{stroke:#ddd;stroke-width:1}.label{font-size:15px}.tick{font-size:13px}.legend{font-size:13px}.ci{stroke:#222;stroke-width:1.4}</style>
+<line x1="65" y1="348" x2="345" y2="348" class="grid"/><text x="57" y="353" text-anchor="end" class="tick">0</text>
+<line x1="65" y1="248.00000000000003" x2="345" y2="248.00000000000003" class="grid"/><text x="57" y="253.00000000000003" text-anchor="end" class="tick">1</text>
+<line x1="65" y1="148" x2="345" y2="148" class="grid"/><text x="57" y="153" text-anchor="end" class="tick">2</text>
+<line x1="65" y1="48" x2="345" y2="48" class="grid"/><text x="57" y="53" text-anchor="end" class="tick">3</text>
+<line x1="65" y1="48" x2="65" y2="348" class="axis"/><line x1="65" y1="348" x2="345" y2="348" class="axis"/>
+<polyline points="65,113.58333333333333 158.33333333333331,97.83333333333337 251.66666666666666,91.5 345,85.66666666666666" fill="none" stroke="#E69F00" stroke-width="3"/>
+<line x1="65" y1="94.67467543322486" x2="65" y2="132.4919912334418" class="ci"/><circle cx="65" cy="113.58333333333333" r="5" fill="#E69F00"/><text x="65" y="370" text-anchor="middle" class="tick">4</text>
+<line x1="158.33333333333331" y1="87.11919054603267" x2="158.33333333333331" y2="108.54747612063403" class="ci"/><circle cx="158.33333333333331" cy="97.83333333333337" r="5" fill="#E69F00"/><text x="158.33333333333331" y="370" text-anchor="middle" class="tick">5</text>
+<line x1="251.66666666666666" y1="77.26634293498526" x2="251.66666666666666" y2="105.73365706501475" class="ci"/><circle cx="251.66666666666666" cy="91.5" r="5" fill="#E69F00"/><text x="251.66666666666666" y="370" text-anchor="middle" class="tick">6</text>
+<line x1="345" y1="76.87987935717618" x2="345" y2="94.4534539761571" class="ci"/><circle cx="345" cy="85.66666666666666" r="5" fill="#E69F00"/><text x="345" y="370" text-anchor="middle" class="tick">7</text>
+<line x1="65" y1="82.49999999999997" x2="345" y2="82.49999999999997" stroke="#009E73" stroke-width="3" stroke-dasharray="8 5"/>
+<text x="205" y="30" text-anchor="middle" class="label">Poisson</text><text x="205" y="390" text-anchor="middle" class="label">B1 occupancy threshold θ</text>
+<line x1="415" y1="348" x2="695" y2="348" class="grid"/><text x="407" y="353" text-anchor="end" class="tick">0</text>
+<line x1="415" y1="248.00000000000003" x2="695" y2="248.00000000000003" class="grid"/><text x="407" y="253.00000000000003" text-anchor="end" class="tick">1</text>
+<line x1="415" y1="148" x2="695" y2="148" class="grid"/><text x="407" y="153" text-anchor="end" class="tick">2</text>
+<line x1="415" y1="48" x2="695" y2="48" class="grid"/><text x="407" y="53" text-anchor="end" class="tick">3</text>
+<line x1="415" y1="48" x2="415" y2="348" class="axis"/><line x1="415" y1="348" x2="695" y2="348" class="axis"/>
+<polyline points="415,164.33333333333331 508.3333333333333,153.66666666666666 601.6666666666666,147.41666666666666 695,138.08333333333331" fill="none" stroke="#E69F00" stroke-width="3"/>
+<line x1="415" y1="149.70193359775703" x2="415" y2="178.96473306890962" class="ci"/><circle cx="415" cy="164.33333333333331" r="5" fill="#E69F00"/><text x="415" y="370" text-anchor="middle" class="tick">4</text>
+<line x1="508.3333333333333" y1="133.3533195465532" x2="508.3333333333333" y2="173.98001378678015" class="ci"/><circle cx="508.3333333333333" cy="153.66666666666666" r="5" fill="#E69F00"/><text x="508.3333333333333" y="370" text-anchor="middle" class="tick">5</text>
+<line x1="601.6666666666666" y1="131.3601987513166" x2="601.6666666666666" y2="163.47313458201677" class="ci"/><circle cx="601.6666666666666" cy="147.41666666666666" r="5" fill="#E69F00"/><text x="601.6666666666666" y="370" text-anchor="middle" class="tick">6</text>
+<line x1="695" y1="117.97971038662713" x2="695" y2="158.18695628003957" class="ci"/><circle cx="695" cy="138.08333333333331" r="5" fill="#E69F00"/><text x="695" y="370" text-anchor="middle" class="tick">7</text>
+<line x1="415" y1="166.00000000000003" x2="695" y2="166.00000000000003" stroke="#009E73" stroke-width="3" stroke-dasharray="8 5"/>
+<text x="555" y="30" text-anchor="middle" class="label">MMPP</text><text x="555" y="390" text-anchor="middle" class="label">B1 occupancy threshold θ</text>
+<line x1="765" y1="348" x2="1045" y2="348" class="grid"/><text x="757" y="353" text-anchor="end" class="tick">0</text>
+<line x1="765" y1="248.00000000000003" x2="1045" y2="248.00000000000003" class="grid"/><text x="757" y="253.00000000000003" text-anchor="end" class="tick">1</text>
+<line x1="765" y1="148" x2="1045" y2="148" class="grid"/><text x="757" y="153" text-anchor="end" class="tick">2</text>
+<line x1="765" y1="48" x2="1045" y2="48" class="grid"/><text x="757" y="53" text-anchor="end" class="tick">3</text>
+<line x1="765" y1="48" x2="765" y2="348" class="axis"/><line x1="765" y1="348" x2="1045" y2="348" class="axis"/>
+<polyline points="765,237.33333333333334 858.3333333333334,219.33333333333334 951.6666666666666,208.49999999999997 1045,196.5" fill="none" stroke="#E69F00" stroke-width="3"/>
+<line x1="765" y1="218.8368392030634" x2="765" y2="255.8298274636033" class="ci"/><circle cx="765" cy="237.33333333333334" r="5" fill="#E69F00"/><text x="765" y="370" text-anchor="middle" class="tick">4</text>
+<line x1="858.3333333333334" y1="205.3532343669057" x2="858.3333333333334" y2="233.313432299761" class="ci"/><circle cx="858.3333333333334" cy="219.33333333333334" r="5" fill="#E69F00"/><text x="858.3333333333334" y="370" text-anchor="middle" class="tick">5</text>
+<line x1="951.6666666666666" y1="195.30739386794423" x2="951.6666666666666" y2="221.69260613205574" class="ci"/><circle cx="951.6666666666666" cy="208.49999999999997" r="5" fill="#E69F00"/><text x="951.6666666666666" y="370" text-anchor="middle" class="tick">6</text>
+<line x1="1045" y1="181.52034356943466" x2="1045" y2="211.47965643056534" class="ci"/><circle cx="1045" cy="196.5" r="5" fill="#E69F00"/><text x="1045" y="370" text-anchor="middle" class="tick">7</text>
+<line x1="765" y1="155.83333333333331" x2="1045" y2="155.83333333333331" stroke="#009E73" stroke-width="3" stroke-dasharray="8 5"/>
+<text x="905" y="30" text-anchor="middle" class="label">Rate/model drift</text><text x="905" y="390" text-anchor="middle" class="label">B1 occupancy threshold θ</text>
+<text transform="translate(18 200) rotate(-90)" text-anchor="middle" class="label">Correct on-time results/s</text><line x1="375" y1="430" x2="405" y2="430" stroke="#E69F00" stroke-width="3"/><text x="412" y="435" class="legend">B1 sweep</text><line x1="535" y1="430" x2="565" y2="430" stroke="#009E73" stroke-width="3" stroke-dasharray="8 5"/><text x="572" y="435" class="legend">DQA-ARC</text></svg>

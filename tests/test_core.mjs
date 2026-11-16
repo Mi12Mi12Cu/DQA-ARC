@@ -26,6 +26,13 @@ assert.equal(exactSignFlipTest([1, 1, 1, 1]).pValue, 0.125);
 assert.equal(exactSignFlipTest([0, 0]).pValue, 1);
 assert.equal(exactMcNemar([1, 1, 1, 0], [0, 0, 0, 0]).pValue, 0.25);
 
+for (let seed = 601; seed <= 610; seed += 1) {
+  const first = generateArrivalScheduleDetailed({ type: 'mmpp', durationSeconds: 120, meanRate: 4, seed });
+  const second = generateArrivalScheduleDetailed({ type: 'mmpp', durationSeconds: 120, meanRate: 4, seed });
+  assert.deepEqual(first, second);
+  assert.ok(first.metadata.visitedLow && first.metadata.visitedHigh, `MMPP seed ${seed} misses a state`);
+}
+
 const admissionParameters = { capacity: 8, occupancyThreshold: 6, reservedCpuSlots: 2 };
 assert.equal(admissionLimit({ policy: 'occupancy-threshold', preferredHardware: 'gpu', ...admissionParameters }), 6);
 assert.equal(admissionLimit({ policy: 'occupancy-threshold', preferredHardware: 'cpu', ...admissionParameters }), 6);
@@ -33,14 +40,11 @@ assert.equal(admissionLimit({ policy: 'static-reservation', preferredHardware: '
 assert.equal(admissionLimit({ policy: 'static-reservation', preferredHardware: 'cpu', ...admissionParameters }), 8);
 assert.equal(admissionLimit({ policy: 'threshold-reservation', preferredHardware: 'gpu', ...admissionParameters }), 4);
 assert.equal(admissionLimit({ policy: 'threshold-reservation', preferredHardware: 'cpu', ...admissionParameters }), 6);
+assert.equal(admissionLimit({ policy: 'fifo', preferredHardware: 'gpu', ...admissionParameters }), 8);
+assert.equal(admissionLimit({ policy: 'fifo', preferredHardware: 'cpu', ...admissionParameters }), 8);
 assert.equal(admissionDecision({ policy: 'threshold-reservation', preferredHardware: 'gpu', occupancy: 4, ...admissionParameters }).accepted, false);
 assert.equal(admissionDecision({ policy: 'threshold-reservation', preferredHardware: 'cpu', occupancy: 4, ...admissionParameters }).accepted, true);
-
-for (let seed = 601; seed <= 610; seed += 1) {
-  const first = generateArrivalScheduleDetailed({ type: 'mmpp', durationSeconds: 120, meanRate: 4, seed });
-  const second = generateArrivalScheduleDetailed({ type: 'mmpp', durationSeconds: 120, meanRate: 4, seed });
-  assert.deepEqual(first, second);
-  assert.ok(first.metadata.visitedLow && first.metadata.visitedHigh, `MMPP seed ${seed} misses a state`);
-}
+assert.equal(admissionDecision({ policy: 'fifo', preferredHardware: 'gpu', occupancy: 7, ...admissionParameters }).accepted, true);
+assert.equal(admissionDecision({ policy: 'fifo', preferredHardware: 'gpu', occupancy: 8, ...admissionParameters }).accepted, false);
 
 process.stdout.write('Core task, statistics, queueing, and traffic tests passed.\n');

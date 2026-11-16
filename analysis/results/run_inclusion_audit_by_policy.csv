@@ -1,0 +1,11 @@
+policy,executed,selected,excluded,pilotSmoke,preDesignNoncounterbalanced,exploratoryNoncanonical,incompleteOrConfigMismatch,supersededDuplicate
+adaptive,27,20,7,0,0,7,0,0
+analytical,27,20,7,0,0,7,0,0
+calibrated,26,20,6,0,0,6,0,0
+fifo,30,30,0,0,0,0,0,0
+fixed,91,80,11,0,0,11,0,0
+guarded,138,80,58,1,40,17,0,0
+occupancy-threshold,121,120,1,1,0,0,0,0
+static-reservation,31,30,1,1,0,0,0,0
+threshold-reservation,31,30,1,1,0,0,0,0
+TOTAL,522,430,92,4,40,48,0,0

@@ -27,18 +27,66 @@ function latestBy(items, keyFn) {
   return [...selected.values()];
 }
 
-const summaries = walk(path.join('experiments', 'live_runs'), 'summary.json').flatMap((file) => {
+const allSummaries = walk(path.join('experiments', 'live_runs'), 'summary.json').flatMap((file) => {
   try { return [{ file, data: JSON.parse(fs.readFileSync(file, 'utf8')) }]; } catch { return []; }
-}).filter((x) => x.data.metadata?.config?.campaign?.startsWith('journal-'));
+});
+const summaries = allSummaries.filter((x) => x.data.metadata?.config?.campaign?.startsWith('journal-'));
 
 const canonicalCampaigns = new Set([
   'journal-main', 'journal-allocator-balanced', 'journal-sweep', 'journal-drift',
   'journal-standard-main', 'journal-standard-drift'
 ]);
-const selected = latestBy(summaries, ({ data }) => {
+function isCompleteFinalRun(item) {
+  const c = item.data.metadata?.config;
+  if (!c || !canonicalCampaigns.has(c.campaign) || Number(item.data.counts?.errors ?? 0) !== 0) return false;
+  const expectedDuration = ['journal-main', 'journal-standard-main'].includes(c.campaign) ? 120 : 60;
+  if (c.durationSeconds !== expectedDuration) return false;
+  const runDir = path.dirname(item.file);
+  return ['events.jsonl', 'epochs.csv', 'resources.csv', 'broker-log.json'].every((name) => fs.existsSync(path.join(runDir, name)));
+}
+const selected = latestBy(summaries.filter(isCompleteFinalRun), ({ data }) => {
   const c = data.metadata.config;
-  return [c.campaign, c.traffic, c.policy, c.allocator, c.fixedDeadline, c.driftModel || '', c.seed].join('|');
+  return [c.campaign, c.traffic, c.policy, c.allocator, c.fixedDeadline, c.driftModel || '', c.seed,
+    c.occupancyThreshold ?? '', c.reservedCpuSlots ?? ''].join('|');
 }).filter(({ data }) => canonicalCampaigns.has(data.metadata.config.campaign));
+
+const selectedFiles = new Set(selected.map((x) => x.file));
+function exclusionReason(item) {
+  if (selectedFiles.has(item.file)) return 'selected';
+  const campaign = item.data.metadata?.config?.campaign ?? '';
+  if (canonicalCampaigns.has(campaign) && !isCompleteFinalRun(item)) return 'incomplete-or-config-mismatch';
+  if (canonicalCampaigns.has(campaign)) return 'superseded-duplicate';
+  if (campaign === 'journal-allocator') return 'pre-design-noncounterbalanced';
+  if (campaign.includes('smoke')) return 'pilot-smoke';
+  return 'exploratory-noncanonical';
+}
+
+const inclusionRows = allSummaries.map((item) => {
+  const c = item.data.metadata?.config ?? {};
+  return {
+    policy: c.policy ?? 'unspecified', campaign: c.campaign ?? 'unspecified', traffic: c.traffic ?? '',
+    allocator: c.allocator ?? '', seed: c.seed ?? '', occupancyThreshold: c.occupancyThreshold ?? '',
+    selected: selectedFiles.has(item.file) ? 1 : 0, exclusionReason: exclusionReason(item), runDir: path.dirname(item.file)
+  };
+});
+writeCsv(path.join(analysisDir, 'run_inclusion_audit.csv'), inclusionRows);
+
+function summarizeInclusion(policy, rows) {
+  const countReason = (reason) => rows.filter((x) => x.exclusionReason === reason).length;
+  const selectedCount = countReason('selected');
+  return {
+    policy, executed: rows.length, selected: selectedCount, excluded: rows.length - selectedCount,
+    pilotSmoke: countReason('pilot-smoke'),
+    preDesignNoncounterbalanced: countReason('pre-design-noncounterbalanced'),
+    exploratoryNoncanonical: countReason('exploratory-noncanonical'),
+    incompleteOrConfigMismatch: countReason('incomplete-or-config-mismatch'),
+    supersededDuplicate: countReason('superseded-duplicate')
+  };
+}
+const inclusionAuditByPolicy = [...groupBy(inclusionRows, (x) => x.policy)].map(([policy, rows]) => summarizeInclusion(policy, rows))
+  .sort((a, b) => a.policy.localeCompare(b.policy));
+inclusionAuditByPolicy.push(summarizeInclusion('TOTAL', inclusionRows));
+writeCsv(path.join(analysisDir, 'run_inclusion_audit_by_policy.csv'), inclusionAuditByPolicy);
 
 function core(item) {
   const { data, file } = item;
@@ -57,6 +105,7 @@ function core(item) {
     goodput: data.metrics.qualityAdjustedGoodput, rerouted: data.counts.rerouted ?? 0,
     e2eP95Seconds: quantile(completed.map((x) => x.endToEndSeconds).filter(Number.isFinite), 0.95),
     messagingOverheadP99Seconds: quantile(overhead, 0.99),
+    protocolAckP95Ms: data.metrics.protocolAckP95Ms,
     idleGpuPowerWatts: data.metrics.idleGpuPowerWatts,
     gpuDynamicEnergyJoules: data.metrics.gpuDynamicEnergyJoules,
     gpuDynamicJoulesPerCorrectGpuResult: data.metrics.gpuDynamicJoulesPerCorrectGpuResult,
@@ -89,6 +138,7 @@ function preferredClassRows(item) {
     return {
       campaign: c.campaign, traffic: c.traffic, policy: c.policy, allocator: c.allocator,
       fixedDeadline: c.fixedDeadline, driftModel: c.driftModel || '', seed: c.seed,
+      occupancyThreshold: c.occupancyThreshold ?? '', reservedCpuSlots: c.reservedCpuSlots ?? '',
       preferredClass: hardware, published, blocked: blockedClass.length, admitted: admittedClass.length,
       expired: expiredClass.length, completed: completedClass.length, correct: correctClass.length,
       blocking: published ? blockedClass.length / published : 0,
@@ -168,14 +218,15 @@ for (const traffic of ['poisson', 'rate-step']) {
 writeCsv(path.join(analysisDir, 'journal_live_paired_exact.csv'), pairedRows);
 
 function standardScenarioRows(rows) {
+  const prespecifiedBaseline = (x) => x.policy !== 'occupancy-threshold' || Number(x.occupancyThreshold) === 6;
   return [
     ...rows.filter((x) => x.campaign === 'journal-main' && x.policy === 'guarded' && ['poisson', 'mmpp'].includes(x.traffic))
       .map((x) => ({ ...x, scenario: x.traffic, method: 'dqa-arc' })),
     ...rows.filter((x) => x.campaign === 'journal-drift' && x.policy === 'guarded' && x.traffic === 'rate-step')
       .map((x) => ({ ...x, scenario: 'drift', method: 'dqa-arc' })),
-    ...rows.filter((x) => x.campaign === 'journal-standard-main' && ['poisson', 'mmpp'].includes(x.traffic))
+    ...rows.filter((x) => x.campaign === 'journal-standard-main' && ['poisson', 'mmpp'].includes(x.traffic) && prespecifiedBaseline(x))
       .map((x) => ({ ...x, scenario: x.traffic, method: x.policy })),
-    ...rows.filter((x) => x.campaign === 'journal-standard-drift' && x.traffic === 'rate-step')
+    ...rows.filter((x) => x.campaign === 'journal-standard-drift' && x.traffic === 'rate-step' && prespecifiedBaseline(x))
       .map((x) => ({ ...x, scenario: 'drift', method: x.policy }))
   ];
 }
@@ -215,7 +266,7 @@ writeCsv(path.join(analysisDir, 'standard_baseline_class_aggregate.csv'), standa
 const standardPairedRows = [];
 for (const scenario of ['poisson', 'mmpp', 'drift']) {
   const dqa = standardRows.filter((x) => x.scenario === scenario && x.method === 'dqa-arc');
-  for (const baseline of ['occupancy-threshold', 'static-reservation', 'threshold-reservation']) {
+  for (const baseline of ['occupancy-threshold', 'static-reservation', 'threshold-reservation', 'fifo']) {
     const comparison = pairedComparison(`standard/${scenario}/dqa-minus-${baseline}`, dqa, standardRows.filter((x) => x.scenario === scenario && x.method === baseline));
     for (const preferredClass of ['gpu', 'cpu']) {
       const left = standardClassRows.filter((x) => x.scenario === scenario && x.method === 'dqa-arc' && x.preferredClass === preferredClass);
@@ -236,6 +287,55 @@ for (const scenario of ['poisson', 'mmpp', 'drift']) {
   }
 }
 writeCsv(path.join(analysisDir, 'standard_baseline_paired_exact.csv'), standardPairedRows);
+
+function thresholdScenarioRows(rows) {
+  return [
+    ...rows.filter((x) => x.campaign === 'journal-standard-main' && x.policy === 'occupancy-threshold' && ['poisson', 'mmpp'].includes(x.traffic))
+      .map((x) => ({ ...x, scenario: x.traffic, theta: Number(x.occupancyThreshold) })),
+    ...rows.filter((x) => x.campaign === 'journal-standard-drift' && x.policy === 'occupancy-threshold' && x.traffic === 'rate-step')
+      .map((x) => ({ ...x, scenario: 'drift', theta: Number(x.occupancyThreshold) }))
+  ].filter((x) => [4, 5, 6, 7].includes(x.theta));
+}
+
+const thresholdRows = thresholdScenarioRows(liveRows).sort((a, b) => a.scenario.localeCompare(b.scenario) || a.theta - b.theta || a.seed - b.seed);
+writeCsv(path.join(analysisDir, 'b1_threshold_sweep_runs.csv'), thresholdRows);
+
+const thresholdAggregateRows = [];
+for (const [key, rows] of groupBy(thresholdRows, (r) => `${r.scenario}|${r.theta}`)) {
+  const [scenario, theta] = key.split('|');
+  const record = { scenario, theta: Number(theta), n: rows.length };
+  for (const field of ['blocking', 'expiry', 'completion', 'accuracy', 'goodput']) {
+    const interval = ci95(rows.map((x) => x[field]).filter(Number.isFinite));
+    record[`${field}Mean`] = interval.mean;
+    record[`${field}Ci95`] = interval.halfWidth;
+  }
+  thresholdAggregateRows.push(record);
+}
+writeCsv(path.join(analysisDir, 'b1_threshold_sweep_aggregate.csv'), thresholdAggregateRows);
+
+const thresholdPairedRows = [];
+for (const scenario of ['poisson', 'mmpp', 'drift']) {
+  const dqa = standardRows.filter((x) => x.scenario === scenario && x.method === 'dqa-arc');
+  for (const theta of [4, 5, 6, 7]) {
+    thresholdPairedRows.push(pairedComparison(
+      `threshold-sweep/${scenario}/dqa-minus-theta-${theta}`,
+      dqa,
+      thresholdRows.filter((x) => x.scenario === scenario && x.theta === theta)
+    ));
+  }
+}
+for (const scenario of ['poisson', 'mmpp', 'drift']) {
+  const family = thresholdPairedRows.filter((row) => row.comparison.startsWith(`threshold-sweep/${scenario}/`));
+  for (const field of ['blocking', 'expiry', 'goodput']) {
+    const ordered = [...family].sort((a, b) => a[`${field}ExactP`] - b[`${field}ExactP`]);
+    let running = 0;
+    ordered.forEach((row, index) => {
+      running = Math.max(running, (ordered.length - index) * row[`${field}ExactP`]);
+      row[`${field}HolmP`] = Math.min(1, running);
+    });
+  }
+}
+writeCsv(path.join(analysisDir, 'b1_threshold_sweep_paired_exact.csv'), thresholdPairedRows);
 
 const profileFiles = fs.readdirSync(path.join('experiments', 'model_profiles'))
   .filter((x) => x.endsWith('.jsonl')).map((x) => path.join('experiments', 'model_profiles', x));
@@ -323,13 +423,24 @@ function estimateBlockingSlope(traffic) {
 const stabilityEstimates = ['poisson', 'rate-step'].map(estimateBlockingSlope);
 
 const report = {
-  generatedAt: new Date().toISOString(), selectedLiveRuns: liveRows.length,
+  generatedAt: new Date().toISOString(), executedLiveRuns: allSummaries.length, selectedLiveRuns: liveRows.length,
+  excludedLiveRuns: allSummaries.length - liveRows.length,
   completedByCampaign: Object.fromEntries([...groupBy(liveRows, (x) => x.campaign)].map(([k, v]) => [k, v.length])),
+  inclusionAuditByPolicy,
   aggregateRows, pairedRows, qualityRows,
   standardAggregateRows, standardClassAggregateRows, standardPairedRows,
+  thresholdAggregateRows, thresholdPairedRows,
   mmppRunsWithoutBothStates: liveRows.filter((x) => x.traffic === 'mmpp' && x.mmppVisitedBoth !== 1).map((x) => ({ campaign: x.campaign, policy: x.policy, seed: x.seed })),
   measuredMessagingReserveP99Seconds: quantile(liveRows.map((x) => x.messagingOverheadP99Seconds).filter(Number.isFinite), 0.99),
+  protocolAckP95AcrossRuns: {
+    meanMs: mean(liveRows.map((x) => x.protocolAckP95Ms).filter(Number.isFinite)),
+    minMs: Math.min(...liveRows.map((x) => x.protocolAckP95Ms).filter(Number.isFinite)),
+    maxMs: Math.max(...liveRows.map((x) => x.protocolAckP95Ms).filter(Number.isFinite))
+  },
   stabilityEstimates
 };
 writeJson(path.join(analysisDir, 'journal_analysis.json'), report);
-process.stdout.write(`${JSON.stringify({ selectedLiveRuns: report.selectedLiveRuns, completedByCampaign: report.completedByCampaign, qualityRows: report.qualityRows, mmppRunsWithoutBothStates: report.mmppRunsWithoutBothStates }, null, 2)}\n`);
+process.stdout.write(`${JSON.stringify({ executedLiveRuns: report.executedLiveRuns, selectedLiveRuns: report.selectedLiveRuns,
+  excludedLiveRuns: report.excludedLiveRuns, completedByCampaign: report.completedByCampaign,
+  inclusionAuditByPolicy: report.inclusionAuditByPolicy, qualityRows: report.qualityRows,
+  mmppRunsWithoutBothStates: report.mmppRunsWithoutBothStates }, null, 2)}\n`);

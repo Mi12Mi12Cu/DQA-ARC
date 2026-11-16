@@ -70,9 +70,15 @@ node controller/run_journal_campaign.mjs --phase sweep --duration 60 --profile e
 node controller/run_journal_campaign.mjs --phase drift --duration 60 --best-fixed-deadline 8 --profile experiments/model_profiles/profile_both_calibration_20261109T031430Z.jsonl
 node controller/run_journal_campaign.mjs --phase standard-main --duration 120 --profile experiments/model_profiles/profile_both_calibration_20261109T031430Z.jsonl
 node controller/run_journal_campaign.mjs --phase standard-drift --duration 60 --profile experiments/model_profiles/profile_both_calibration_20261109T031430Z.jsonl
+node controller/run_journal_campaign.mjs --phase theta-main --duration 120 --profile experiments/model_profiles/profile_both_calibration_20261109T031430Z.jsonl
+node controller/run_journal_campaign.mjs --phase theta-drift --duration 60 --profile experiments/model_profiles/profile_both_calibration_20261109T031430Z.jsonl
+node controller/run_journal_campaign.mjs --phase fifo-main --duration 120 --profile experiments/model_profiles/profile_both_calibration_20261109T031430Z.jsonl
+node controller/run_journal_campaign.mjs --phase fifo-drift --duration 60 --profile experiments/model_profiles/profile_both_calibration_20261109T031430Z.jsonl
 ```
 
-The phases contain 100 main runs, 40 balanced allocator runs, 60 deadline-sweep runs, 20 model-service-drift runs, and 90 conventional-baseline runs. The baseline study fixes capacity at 8, the B1/B3 occupancy threshold at 6, the B2/B3 CPU-priority reservation at 2 slots, and the application deadline at 8 seconds. New run directories are written to `experiments/live_runs/`.
+The selected matrices contain 100 main runs, 40 balanced allocator runs, 60 deadline-sweep runs, 20 model-service-drift runs, 90 B1--B3 runs, 90 B1 sensitivity runs beyond the reused $\theta=6$ cells, and 30 FIFO runs. The baseline study fixes capacity at 8, the prespecified B1/B3 occupancy threshold at 6, the B2/B3 CPU-priority reservation at 2 slots, and the application deadline at 8 seconds. The sensitivity phases evaluate $\theta\in\{4,5,7\}$ and reuse the already collected $\theta=6$ cells. New run directories are written to `experiments/live_runs/`.
+
+The repository contains 522 executed run directories. Analysis selects 430 complete prespecified runs and classifies 92 design-stage runs using configuration metadata only; no outcome-based exclusion is applied.
 
 ## 6. Execute empirical replay
 
@@ -87,10 +93,11 @@ Replay resamples the measured calibration service distributions and held-out cor
 ```powershell
 npm.cmd run analyze
 npm.cmd run validate
+npm.cmd run validate:professor
 npm.cmd run figures
 ```
 
-Analysis writes the aggregate live table, class-specific outcomes, exact paired comparisons, conventional-baseline tables, held-out quality strategies, and consolidated JSON to `analysis/results/`. Figures are written to `figures/` as SVG and PNG.
+Analysis writes the aggregate live table, class-specific outcomes, exact paired comparisons, FIFO/conventional-baseline tables, B1 threshold sensitivity, the run-inclusion audit, held-out quality strategies, and consolidated JSON to `analysis/results/`. Figures are written to `figures/` as SVG and PNG. The professor-experiment validator requires 15 cells, 150 evidence runs, and ten paired seeds per cell.
 
 The archived conventional-baseline directories use short names such as `std_mmpp_b3_s601` to avoid Windows path-length failures. The complete campaign and policy names remain recorded in each run's `summary.json`.
 

@@ -1,0 +1,12 @@
+{
+  "executed_live_runs": 522,
+  "selected_live_runs": 430,
+  "excluded_live_runs": 92,
+  "professor_experiment_cells": 15,
+  "validated_professor_experiment_runs": 150,
+  "b1_threshold_runs": 120,
+  "fifo_runs": 30,
+  "paired_seeds_per_cell": 10,
+  "b1_thresholds": [4, 5, 6, 7],
+  "status": "validated"
+}

@@ -1,6 +1,6 @@
 {
   "name": "mqtt-llm-application-state-control",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "private": true,
   "type": "module",
   "description": "Reproducible Mosquitto and LLM experiments for deadline- and quality-aware MQTT application-state control.",
@@ -14,9 +14,11 @@
     "simulate": "node workloads/run_simulation.mjs",
     "analyze": "node analysis/analyze_journal_results.mjs",
     "validate": "node analysis/validate_artifact.mjs",
+    "validate:professor": "node analysis/validate_professor_experiments.mjs",
     "manifest": "node analysis/generate_manifest.mjs",
     "figures": "node analysis/generate_journal_figures.mjs && node analysis/render_figures.mjs --dir figures",
     "render:paper": "node analysis/render_manuscript_preview.mjs",
+    "build:paper-single": "node analysis/build_single_file_manuscript.mjs",
     "artifact": "npm run analyze && npm run figures"
   },
   "dependencies": {

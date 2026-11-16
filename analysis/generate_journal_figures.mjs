@@ -19,7 +19,7 @@ const esc = (value) => String(value).replaceAll('&', '&amp;').replaceAll('<', '&
 const palette = {
   fixed: '#555555', analytical: '#E69F00', calibrated: '#0072B2', adaptive: '#CC79A7', guarded: '#009E73',
   quality: '#0072B2', compact: '#E69F00', maximum: '#D55E00', token: '#CC79A7', burst: '#56B4E9',
-  occupancy: '#E69F00', reservation: '#0072B2', combined: '#CC79A7'
+  occupancy: '#E69F00', reservation: '#0072B2', combined: '#CC79A7', fifo: '#D55E00'
 };
 
 function frame(width, height, body) {
@@ -190,7 +190,8 @@ const standard = parseCsv(path.join(inputDir, 'standard_baseline_aggregate.csv')
     ['dqa-arc', 'DQA-ARC', palette.guarded],
     ['occupancy-threshold', 'B1 occupancy', palette.occupancy],
     ['static-reservation', 'B2 reservation', palette.reservation],
-    ['threshold-reservation', 'B3 combined', palette.combined]
+    ['threshold-reservation', 'B3 combined', palette.combined],
+    ['fifo', 'FIFO/no proactive admission', palette.fifo]
   ];
   const panels = [
     { field: 'blockingMean', max: 0.8, percent: true, label: 'Blocking probability' },
@@ -209,19 +210,50 @@ const standard = parseCsv(path.join(inputDir, 'standard_baseline_aggregate.csv')
       methods.forEach(([method, , color], mi) => {
         const row = standard.find((x) => x.scenario === scenario && x.method === method);
         if (!row) return;
-        const x = center + (mi - 1.5) * 19; const value = row[panel.field];
+        const x = center + (mi - 2) * 16; const value = row[panel.field];
         const halfWidth = Number(row[panel.field.replace(/Mean$/, 'Ci95')]) || 0;
         const y = top + plotH * (1 - Math.min(panel.max, value) / panel.max);
         const highY = top + plotH * (1 - Math.min(panel.max, value + halfWidth) / panel.max);
         const lowY = top + plotH * (1 - Math.max(0, value - halfWidth) / panel.max);
-        body.push(`<rect x="${x - 8}" y="${y}" width="16" height="${top + plotH - y}" fill="${color}"/><line x1="${x}" y1="${highY}" x2="${x}" y2="${lowY}" class="ci"/><line x1="${x - 4}" y1="${highY}" x2="${x + 4}" y2="${highY}" class="ci"/><line x1="${x - 4}" y1="${lowY}" x2="${x + 4}" y2="${lowY}" class="ci"/>`);
+        body.push(`<rect x="${x - 7}" y="${y}" width="14" height="${top + plotH - y}" fill="${color}"/><line x1="${x}" y1="${highY}" x2="${x}" y2="${lowY}" class="ci"/><line x1="${x - 4}" y1="${highY}" x2="${x + 4}" y2="${highY}" class="ci"/><line x1="${x - 4}" y1="${lowY}" x2="${x + 4}" y2="${lowY}" class="ci"/>`);
       });
       body.push(`<text x="${center}" y="${top + plotH + 22}" text-anchor="middle" class="tick">${label}</text>`);
     });
     body.push(`<text x="${left + plotW / 2}" y="${height - 52}" text-anchor="middle" class="label">${panel.label}</text>`);
   });
-  methods.forEach(([, label, color], i) => body.push(`<rect x="${270 + i * 170}" y="12" width="13" height="13" fill="${color}"/><text x="${289 + i * 170}" y="24" class="legend">${label}</text>`));
+  methods.forEach(([, label, color], i) => body.push(`<rect x="${150 + i * 200}" y="12" width="13" height="13" fill="${color}"/><text x="${169 + i * 200}" y="24" class="legend">${label}</text>`));
   write('fig_j7_standard_baselines.svg', body.join('\n'), width, height);
+}
+
+const thresholdSweep = parseCsv(path.join(inputDir, 'b1_threshold_sweep_aggregate.csv'));
+{
+  const width = 1080; const height = 450; const body = [];
+  const scenarios = [['poisson', 'Poisson'], ['mmpp', 'MMPP'], ['drift', 'Rate/model drift']];
+  const thresholds = [4, 5, 6, 7];
+  scenarios.forEach(([scenario, label], panelIndex) => {
+    const left = 65 + panelIndex * 350; const top = 48; const plotW = 280; const plotH = 300; const yMax = 3;
+    for (let tick = 0; tick <= 3; tick += 1) {
+      const y = top + plotH * (1 - tick / yMax);
+      body.push(`<line x1="${left}" y1="${y}" x2="${left + plotW}" y2="${y}" class="grid"/><text x="${left - 8}" y="${y + 5}" text-anchor="end" class="tick">${tick}</text>`);
+    }
+    body.push(`<line x1="${left}" y1="${top}" x2="${left}" y2="${top + plotH}" class="axis"/><line x1="${left}" y1="${top + plotH}" x2="${left + plotW}" y2="${top + plotH}" class="axis"/>`);
+    const rows = thresholds.map((theta) => thresholdSweep.find((x) => x.scenario === scenario && x.theta === theta)).filter(Boolean);
+    const points = rows.map((row, i) => [left + plotW * i / (thresholds.length - 1), top + plotH * (1 - Math.min(yMax, row.goodputMean) / yMax), row]);
+    body.push(`<polyline points="${points.map(([x, y]) => `${x},${y}`).join(' ')}" fill="none" stroke="${palette.occupancy}" stroke-width="3"/>`);
+    points.forEach(([x, y, row], index) => {
+      const high = top + plotH * (1 - Math.min(yMax, row.goodputMean + row.goodputCi95) / yMax);
+      const low = top + plotH * (1 - Math.max(0, row.goodputMean - row.goodputCi95) / yMax);
+      body.push(`<line x1="${x}" y1="${high}" x2="${x}" y2="${low}" class="ci"/><circle cx="${x}" cy="${y}" r="5" fill="${palette.occupancy}"/><text x="${x}" y="${top + plotH + 22}" text-anchor="middle" class="tick">${thresholds[index]}</text>`);
+    });
+    const dqa = standard.find((x) => x.scenario === scenario && x.method === 'dqa-arc');
+    if (dqa) {
+      const y = top + plotH * (1 - Math.min(yMax, dqa.goodputMean) / yMax);
+      body.push(`<line x1="${left}" y1="${y}" x2="${left + plotW}" y2="${y}" stroke="${palette.guarded}" stroke-width="3" stroke-dasharray="8 5"/>`);
+    }
+    body.push(`<text x="${left + plotW / 2}" y="30" text-anchor="middle" class="label">${label}</text><text x="${left + plotW / 2}" y="390" text-anchor="middle" class="label">B1 occupancy threshold θ</text>`);
+  });
+  body.push(`<text transform="translate(18 200) rotate(-90)" text-anchor="middle" class="label">Correct on-time results/s</text><line x1="375" y1="430" x2="405" y2="430" stroke="${palette.occupancy}" stroke-width="3"/><text x="412" y="435" class="legend">B1 sweep</text><line x1="535" y1="430" x2="565" y2="430" stroke="${palette.guarded}" stroke-width="3" stroke-dasharray="8 5"/><text x="572" y="435" class="legend">DQA-ARC</text>`);
+  write('fig_j8_b1_threshold_sweep.svg', body.join('\n'), width, height);
 }
 
 const replay = parseCsv(path.join('experiments', 'replay_runs', 'empirical_replay_aggregate.csv'));

@@ -1,0 +1,2 @@
+elapsedSeconds,observedRate,lambdaHat,lambdaUpper,observedBlocking,smoothedBlocking,occupancy,deadlineSeconds,meanTarget,feedforwardSeconds,feedbackSeconds,nextDeadlineSeconds,arrivals,blocked,completions,correct
+2.0108294,2,1.5,2.9246117892254015,0,0.034999999999999996,1,0.7048026921909215,0.52130768364529,0.52130768364529,0.7048026921909215,0.52130768364529,4,0,3,2

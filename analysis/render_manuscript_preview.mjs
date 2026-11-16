@@ -2,8 +2,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { PDFParse } from 'pdf-parse';
 
-const pdf = path.join('paper', 'main.pdf');
-const out = path.join('paper', 'preview');
+const pdf = process.argv[2] ?? path.join('paper', 'main.pdf');
+const out = process.argv[3] ?? path.join('paper', 'preview');
 fs.mkdirSync(out, { recursive: true });
 const parser = new PDFParse({ data: fs.readFileSync(pdf) });
 const result = await parser.getScreenshot({ scale: 1.25, imageDataUrl: false, imageBuffer: true });
